@@ -1,12 +1,13 @@
 import { signUpReq } from "@/lib/api";
-/** TODO: Add react hook form and tanstak query */
-import { useMutation } from "@tanstack/react-query";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 import { SignUpFormSchema } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+/** TODO: Add react hook form and tanstak query */
+import { useMutation } from "@tanstack/react-query";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import FormField from "./formField";
+import { Button } from "./ui/button";
+import { AxiosError } from "axios";
+import { redirect } from "next/navigation";
 
 type fields = {
 	name: string;
@@ -17,6 +18,9 @@ type fields = {
 const signupForm = () => {
 	const mutate = useMutation({
 		mutationFn: signUpReq,
+		onSuccess() {
+			redirect("/auth/signin");
+		},
 	});
 
 	const {
@@ -29,40 +33,58 @@ const signupForm = () => {
 	const onSubmit: SubmitHandler<fields> = async (data) => {
 		console.log(data);
 		const validatedInputs = SignUpFormSchema.safeParse(data);
-		if (validatedInputs.success) await mutate.mutateAsync(data);
+		if (validatedInputs.success) {
+			await mutate.mutateAsync(data);
+		}
 	};
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
-			<div className="flex flex-col gap-2">
-				<div>
-					<Label htmlFor="name">Name</Label>
-					<Input id="name" placeholder="John Doe" {...register("name")} />
-				</div>
-				{errors.name && <p>{errors.name.message}</p>}
+		<>
+			{mutate.error && (
+				<span className="shadow-lg border border-red-600 rounded text-sm text-red-500 p-2 my-2 bg-red-200">
+					{mutate.error.message}
+				</span>
+			)}
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<div className="flex flex-col gap-2">
+					<FormField
+						register={register}
+						name="name"
+						type="text"
+						error={errors.name}
+						placeholder="John Doe"
+					>
+						Name
+					</FormField>
+					<FormField
+						error={errors.email}
+						register={register}
+						type="email"
+						name="email"
+						placeholder="exemple@exemple.com"
+					>
+						Email
+					</FormField>
 
-				<div>
-					<Label htmlFor="email">Email</Label>
-					<Input
-						id="email"
-						placeholder="john@exemple.com"
-						{...register("email")}
-					/>
-				</div>
+					<FormField
+						register={register}
+						type="password"
+						name="password"
+						error={errors.password}
+					>
+						Password
+					</FormField>
 
-				<div>
-					<Label htmlFor="password">Password</Label>
-					<Input id="password" type="password" {...register("password")} />
+					<Button
+						type="submit"
+						aria-disabled={mutate.isPending}
+						className="w-full mt-2"
+					>
+						{mutate.isPending ? "Submiting..." : "Submit"}{" "}
+					</Button>
 				</div>
-				<Button
-					type="submit"
-					aria-disabled={mutate.isPending}
-					className="w-full mt-2"
-				>
-					{mutate.isPending ? "Submiting..." : "Submit"}
-				</Button>
-			</div>
-		</form>
+			</form>
+		</>
 	);
 };
 
