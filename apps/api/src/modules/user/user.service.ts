@@ -1,7 +1,6 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
 import type { CreateUserDto } from "./dto/create-user.dto";
 import { hash } from "argon2";
-// biome-ignore lint/style/useImportType: <explanation>
 import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()

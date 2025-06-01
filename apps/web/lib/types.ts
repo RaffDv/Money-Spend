@@ -25,3 +25,8 @@ export const SignUpFormSchema = z.object({
 			message: "Contain at least one special character",
 		}),
 });
+
+export const SignInFormSchema = z.object({
+	email: z.string().email({ message: "Please enter a valid email." }).trim(),
+	password: z.string({ message: "Password field must not be empty." }),
+});

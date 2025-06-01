@@ -1,13 +1,12 @@
+"use client";
 import { signUpReq } from "@/lib/api";
 import { SignUpFormSchema } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-/** TODO: Add react hook form and tanstak query */
 import { useMutation } from "@tanstack/react-query";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import FormField from "./formField";
 import { Button } from "./ui/button";
-import { AxiosError } from "axios";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 type fields = {
 	name: string;
@@ -16,10 +15,11 @@ type fields = {
 };
 
 const signupForm = () => {
+	const router = useRouter();
 	const mutate = useMutation({
 		mutationFn: signUpReq,
 		onSuccess() {
-			redirect("/auth/signin");
+			router.push("/auth/login");
 		},
 	});
 
@@ -40,7 +40,7 @@ const signupForm = () => {
 
 	return (
 		<>
-			{mutate.error && (
+			{mutate.isError && (
 				<span className="shadow-lg border border-red-600 rounded text-sm text-red-500 p-2 my-2 bg-red-200">
 					{mutate.error.message}
 				</span>
