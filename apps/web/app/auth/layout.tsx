@@ -2,7 +2,7 @@ import type { PropsWithChildren } from "react";
 
 const AuthLayout = ({ children }: PropsWithChildren) => {
 	return (
-		<div className="bg-gradient-to-br from-lime-400 to-cyan-400 h-screen flex items-center justify-center text-black">
+		<div className="flex items-center justify-center h-screen w-screen">
 			{children}
 		</div>
 	);

@@ -7,6 +7,8 @@ import { type SubmitHandler, useForm } from "react-hook-form";
 import FormField from "./formField";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
+import SubmitButton from "./submitButton";
 
 type fields = {
 	name: string;
@@ -14,7 +16,7 @@ type fields = {
 	password: string;
 };
 
-const signupForm = () => {
+const SignupForm = () => {
 	const router = useRouter();
 	const mutate = useMutation({
 		mutationFn: signUpReq,
@@ -26,10 +28,12 @@ const signupForm = () => {
 	const {
 		register,
 		handleSubmit,
-		formState: { errors },
+		formState: { errors, isSubmitting },
 	} = useForm<fields>({
 		resolver: zodResolver(SignUpFormSchema),
+		mode: "onBlur", // Valida quando sai do campo
 	});
+
 	const onSubmit: SubmitHandler<fields> = async (data) => {
 		console.log(data);
 		const validatedInputs = SignUpFormSchema.safeParse(data);
@@ -39,53 +43,59 @@ const signupForm = () => {
 	};
 
 	return (
-		<>
-			{mutate.isError && (
-				<span className="shadow-lg border border-red-600 rounded text-sm text-red-500 p-2 my-2 bg-red-200">
-					{mutate.error.message}
-				</span>
-			)}
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<div className="flex flex-col gap-2">
-					<FormField
-						register={register}
-						name="name"
-						type="text"
-						error={errors.name}
-						placeholder="John Doe"
+		<div className="w-full max-w-md mx-auto">
+			{/* Mensagem de erro global com animação */}
+			<AnimatePresence>
+				{mutate.isError && (
+					<motion.div
+						initial={{ height: 0, opacity: 0 }}
+						animate={{ height: "auto", opacity: 1 }}
+						exit={{ height: 0, opacity: 0 }}
+						className="w-full flex justify-center"
 					>
-						Name
-					</FormField>
-					<FormField
-						error={errors.email}
-						register={register}
-						type="email"
-						name="email"
-						placeholder="exemple@exemple.com"
-					>
-						Email
-					</FormField>
+						<span className="shadow-lg border border-red-600 rounded text-sm text-red-500 p-2 my-2 bg-red-200 m-4">
+							{mutate.error.message}
+						</span>
+					</motion.div>
+				)}
+			</AnimatePresence>
 
-					<FormField
-						register={register}
-						type="password"
-						name="password"
-						error={errors.password}
-					>
-						Password
-					</FormField>
+			<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+				<FormField
+					register={register}
+					name="name"
+					type="text"
+					error={errors.name}
+					placeholder="John Doe"
+				>
+					Name
+				</FormField>
 
-					<Button
-						type="submit"
-						aria-disabled={mutate.isPending}
-						className="w-full mt-2"
-					>
-						{mutate.isPending ? "Submiting..." : "Submit"}{" "}
-					</Button>
-				</div>
+				<FormField
+					error={errors.email}
+					register={register}
+					type="email"
+					name="email"
+					placeholder="exemple@exemple.com"
+				>
+					Email
+				</FormField>
+
+				<FormField
+					register={register}
+					type="password"
+					name="password"
+					error={errors.password}
+				>
+					Password
+				</FormField>
+
+				<SubmitButton isSubmitting={isSubmitting} mutation={mutate}>
+					<span>Register</span>
+				</SubmitButton>
 			</form>
-		</>
+		</div>
 	);
 };
 
-export default signupForm;
+export default SignupForm;

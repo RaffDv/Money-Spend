@@ -1,14 +1,15 @@
 "use client";
+import { loginReq } from "@/lib/api";
+import { createSession } from "@/lib/session";
+import { SignInFormSchema } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import FormField from "./formField";
-import { SignInFormSchema } from "@/lib/types";
-import { useMutation } from "@tanstack/react-query";
-import { loginReq } from "@/lib/api";
-import { useRouter } from "next/navigation";
-import { Button } from "./ui/button";
-import Link from "next/link";
-import { createSession } from "@/lib/session";
+import SubmitButton from "./submitButton";
 
 type fields = {
 	email: string;
@@ -18,7 +19,7 @@ const SignInForm = () => {
 	const {
 		register,
 		handleSubmit,
-		formState: { errors },
+		formState: { errors, isSubmitting },
 	} = useForm<fields>({
 		resolver: zodResolver(SignInFormSchema),
 	});
@@ -43,12 +44,24 @@ const SignInForm = () => {
 
 	return (
 		<>
-			{mutation.isError && (
-				<span className="shadow-lg border border-red-600 rounded text-sm text-red-500 p-2 my-2 bg-red-200">
-					{mutation.error.message}
-				</span>
-			)}
-			<form onSubmit={handleSubmit(onSubmit)}>
+			<AnimatePresence>
+				{mutation.isError && (
+					<motion.div
+						initial={{ height: 0, opacity: 0 }}
+						animate={{ height: "auto", opacity: 1 }}
+						exit={{ height: 0, opacity: 0 }}
+						className=" w-full flex items-center justify-center "
+					>
+						<span className="shadow-lg border border-red-600 rounded text-sm text-red-500 p-2 my-2 bg-red-200 m-4">
+							{mutation.error.message}
+						</span>
+					</motion.div>
+				)}
+			</AnimatePresence>
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				className="w-full max-w-80 h-fit p-3"
+			>
 				<div className="flex flex-col gap-2">
 					<FormField
 						register={register}
@@ -75,14 +88,10 @@ const SignInForm = () => {
 						Forgot password
 					</Link>
 				</div>
-				<Button
-					type="submit"
-					aria-disabled={mutation.isPending}
-					className="w-full my-2"
-				>
-					{mutation.isPending ? "Submiting..." : "Sign In"}{" "}
-				</Button>
-			</form>
+				<SubmitButton isSubmitting={isSubmitting} mutation={mutation}>
+					<span>Login</span>
+				</SubmitButton>
+			</form>{" "}
 		</>
 	);
 };

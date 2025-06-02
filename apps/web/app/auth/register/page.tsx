@@ -1,19 +1,32 @@
 "use client";
 import Link from "next/link";
 import SignUpForm from "@/components/signupForm";
+import {
+	Card,
+	CardContent,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 
 const Page = () => {
 	return (
-		<div className="bg-white p-8 rounded-lg shadow-lg w-96 flex flex-col justify-center items-center">
-			<h1 className="text-center text-2xl font-bold mb-4">Register Page</h1>
-			<SignUpForm />
-			<div className="flex justify-between text-sm">
-				<p>Already have an account? </p>
-				<Link href={"/auth/signin"}>
-					<span className="underline"> Sign In</span>
-				</Link>
-			</div>
-		</div>
+		<Card className="w-fit h-fit min-w-96 ">
+			<CardHeader>
+				<CardTitle>Register Page</CardTitle>
+			</CardHeader>
+			<CardContent>
+				<SignUpForm />
+			</CardContent>
+			<CardFooter>
+				<div className="flex justify-between text-sm">
+					<p>Already have an account? </p>
+					<Link href={"/auth/login"}>
+						<span className="underline"> Sign In</span>
+					</Link>
+				</div>
+			</CardFooter>
+		</Card>
 	);
 };
 
