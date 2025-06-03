@@ -25,6 +25,8 @@ const Page = async () => {
 					<div>{JSON.stringify(session?.refresh_token)}</div>
 					<br />
 					<div>{JSON.stringify(session?.access_token)}</div>
+
+					<p>test</p>
 				</div>
 			</section>
 		</>
