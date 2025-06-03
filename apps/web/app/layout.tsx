@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Provider from "@/components/Provider";
+import AppBar from "@/components/appBar";
 
 const geistSans = localFont({
 	src: "./fonts/GeistVF.woff",
@@ -23,9 +24,14 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
-			<body className={`${geistSans.variable} ${geistMono.variable} dark`}>
-				<Provider>{children}</Provider>
+		<html lang="en" className="h-dvh dark">
+			<body
+				className={`${geistSans.className} ${geistMono.className} flex h-full flex-col`}
+			>
+				<Provider>
+					<AppBar />
+					{children}
+				</Provider>
 			</body>
 		</html>
 	);

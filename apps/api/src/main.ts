@@ -8,6 +8,8 @@ async function bootstrap() {
 	app.enableCors({
 		origin: true,
 	});
-	await app.listen(process.env.PORT ?? 4000);
+	await app.listen(process.env.PORT ?? 4000, () => {
+		console.log(`Server running on http://localhost:${process.env.PORT}`);
+	});
 }
 bootstrap();

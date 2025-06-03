@@ -9,6 +9,7 @@ import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import SubmitButton from "./submitButton";
+import { signIn } from "next-auth/react";
 
 type fields = {
 	name: string;
@@ -20,8 +21,13 @@ const SignupForm = () => {
 	const router = useRouter();
 	const mutate = useMutation({
 		mutationFn: signUpReq,
-		onSuccess() {
-			router.push("/auth/login");
+		onSuccess: (data, variables) => {
+			signIn("credentials", {
+				callbackUrl: "/",
+				redirect: true,
+				email: variables.email,
+				password: variables.password,
+			});
 		},
 	});
 
@@ -31,7 +37,6 @@ const SignupForm = () => {
 		formState: { errors, isSubmitting },
 	} = useForm<fields>({
 		resolver: zodResolver(SignUpFormSchema),
-		mode: "onBlur", // Valida quando sai do campo
 	});
 
 	const onSubmit: SubmitHandler<fields> = async (data) => {
@@ -43,7 +48,7 @@ const SignupForm = () => {
 	};
 
 	return (
-		<div className="w-full max-w-md mx-auto">
+		<div className="w-full min-w-96">
 			{/* Mensagem de erro global com animação */}
 			<AnimatePresence>
 				{mutate.isError && (

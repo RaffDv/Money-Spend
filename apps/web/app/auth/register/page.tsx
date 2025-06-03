@@ -11,22 +11,24 @@ import {
 
 const Page = () => {
 	return (
-		<Card className="w-fit h-fit min-w-96 ">
-			<CardHeader>
-				<CardTitle>Register Page</CardTitle>
-			</CardHeader>
-			<CardContent>
-				<SignUpForm />
-			</CardContent>
-			<CardFooter>
-				<div className="flex justify-between text-sm">
-					<p>Already have an account? </p>
-					<Link href={"/auth/login"}>
-						<span className="underline"> Sign In</span>
-					</Link>
-				</div>
-			</CardFooter>
-		</Card>
+		<div className="h-full w-full flex flex-col justify-center items-center">
+			<Card className="min-w-96 ">
+				<CardHeader>
+					<CardTitle>Register Page</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<SignUpForm />
+				</CardContent>
+				<CardFooter>
+					<div className="flex justify-between text-sm">
+						<p>Already have an account? </p>
+						<Link href={"/auth/login"}>
+							<span className="underline"> Sign In</span>
+						</Link>
+					</div>
+				</CardFooter>
+			</Card>
+		</div>
 	);
 };
 

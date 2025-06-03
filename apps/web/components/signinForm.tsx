@@ -1,13 +1,14 @@
 "use client";
-import { loginReq } from "@/lib/api";
-import { createSession } from "@/lib/session";
+
 import { SignInFormSchema } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
+import { getSession, signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { type SubmitHandler, useForm } from "react-hook-form";
+import type { z } from "zod";
 import FormField from "./formField";
 import SubmitButton from "./submitButton";
 
@@ -16,6 +17,8 @@ type fields = {
 	password: string;
 };
 const SignInForm = () => {
+	const searchParams = useSearchParams();
+	const callbackUrl = searchParams.get("callbackUrl") || "/";
 	const {
 		register,
 		handleSubmit,
@@ -24,14 +27,31 @@ const SignInForm = () => {
 		resolver: zodResolver(SignInFormSchema),
 	});
 
+	type signInType = z.infer<typeof SignInFormSchema>;
 	const router = useRouter();
 	const mutation = useMutation({
-		mutationFn: loginReq,
-		onSuccess: async (data: { id: string; name: string }) => {
-			await createSession({
-				user: data,
+		mutationFn: async (data: signInType) => {
+			const result = await signIn("credentials", {
+				email: data.email,
+				password: data.password,
+				redirect: false,
 			});
-			router.push("/dashboard");
+
+			console.log("------------------------------------");
+			console.log("RESULT ON SIGNIN MUTATION");
+			console.log(result);
+			console.log("------------------------------------");
+			if (result?.error) {
+				throw new Error(result.error);
+			}
+
+			return result;
+		},
+		onSuccess: async () => {
+			// Aguarda a sessão ser atualizada
+			await getSession();
+			router.push(callbackUrl);
+			router.refresh();
 		},
 	});
 	const onSubmit: SubmitHandler<fields> = async (data) => {

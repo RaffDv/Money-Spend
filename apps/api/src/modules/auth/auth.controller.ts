@@ -1,7 +1,15 @@
-import { Body, Controller, Post, Request, UseGuards } from "@nestjs/common";
+import {
+	Body,
+	Controller,
+	Get,
+	Post,
+	Request,
+	UseGuards,
+} from "@nestjs/common";
 import type { CreateUserDto } from "../user/dto/create-user.dto";
 import { AuthService } from "./auth.service";
 import { LocalAuthGuard } from "./guards/local.guard";
+import { JwtAuthGuard } from "./guards/jwt.guard";
 
 @Controller("auth")
 export class AuthController {
@@ -14,6 +22,13 @@ export class AuthController {
 	@UseGuards(LocalAuthGuard)
 	@Post("login")
 	login(@Request() req) {
-		return req.user;
+		const { id, name } = req.user;
+		return this.authService.login(id, name);
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@Get("protected")
+	getAnything(@Request() req) {
+		return `Protected Route !! You can access this, your ID is ${req.user.id}`;
 	}
 }
