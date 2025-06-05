@@ -23,6 +23,7 @@ api.interceptors.response.use(
 		return Promise.reject(error);
 	},
 );
+
 api.interceptors.request.use(
 	async (config) => {
 		try {
@@ -31,6 +32,7 @@ api.interceptors.request.use(
 			if (session?.access_token) {
 				config.headers.Authorization = `Bearer ${session.access_token}`;
 			}
+			console.log(config.url);
 		} catch (error) {
 			console.error(error);
 		}

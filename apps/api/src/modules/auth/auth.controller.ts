@@ -10,6 +10,7 @@ import type { CreateUserDto } from "../user/dto/create-user.dto";
 import { AuthService } from "./auth.service";
 import { LocalAuthGuard } from "./guards/local.guard";
 import { JwtAuthGuard } from "./guards/jwt.guard";
+import { RefreshGuard } from "./guards/refresh.guard";
 
 @Controller("auth")
 export class AuthController {
@@ -30,5 +31,15 @@ export class AuthController {
 	@Get("protected")
 	getAnything(@Request() req) {
 		return `Protected Route !! You can access this, your ID is ${req.user.id}`;
+	}
+
+	@UseGuards(RefreshGuard)
+	@Post("refresh")
+	refreshToken(@Request() req) {
+		const { id, name } = req.user;
+
+		console.log(req.user);
+
+		return this.authService.refreshToken(id, name);
 	}
 }

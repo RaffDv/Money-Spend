@@ -80,4 +80,30 @@ export class AuthService {
 
 		return currentUser;
 	}
+
+	// FIX: necessary update to rewoke tokens
+	async validateRefreshToken(userId: number) {
+		const user = await this.userService.findOne(userId);
+
+		if (!user) throw new UnauthorizedException("User not found.");
+
+		const currentUser = {
+			id: user.id,
+			name: user.name,
+		};
+
+		return currentUser;
+	}
+
+	// FIX: necessary update to rewoke tokens
+	async refreshToken(userId: number, name: string) {
+		const { access_token, refresh_token } = await this.generateTokens(userId);
+
+		return {
+			id: userId,
+			name,
+			access_token,
+			refresh_token,
+		};
+	}
 }
