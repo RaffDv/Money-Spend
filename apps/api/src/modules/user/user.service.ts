@@ -11,7 +11,7 @@ export class UserService {
 		const { password, ...rest } = createUserDto;
 		const hashedPassword = await hash(password);
 		try {
-			await this.prisma.user.create({
+			const user = await this.prisma.user.create({
 				data: {
 					password: hashedPassword,
 					...rest,
@@ -19,7 +19,7 @@ export class UserService {
 			});
 
 			return {
-				statusCode: HttpStatus.CREATED,
+				user,
 			};
 		} catch (error) {
 			return {

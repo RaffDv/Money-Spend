@@ -1,7 +1,6 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { loginReq } from "./api";
-import dayjs from "dayjs";
 import {
 	getTokenExpiration,
 	isTokenExpired,
@@ -34,6 +33,30 @@ export const authOptions: NextAuthOptions = {
 				return result;
 			},
 		}),
+		{
+			id: "google-custom",
+			name: "Google",
+			type: "oauth",
+			authorization: {
+				url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google/login`,
+				params: {
+					scope: "email profile",
+					response_type: "code",
+				},
+			},
+			clientId: process.env.GOOGLE_CLIENT_ID,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+			profile(profile, tokens) {
+				return {
+					id: profile.id as string,
+					name: profile.name as string,
+					email: profile.email as string,
+					access_token: tokens.access_token as string,
+					refresh_token: tokens.refresh_token as string,
+					image: null,
+				};
+			},
+		},
 	],
 	callbacks: {
 		session: ({ session, token }) => {
@@ -57,21 +80,24 @@ export const authOptions: NextAuthOptions = {
 					accessTokenExpires: getTokenExpiration(user.access_token),
 				};
 			}
-			console.log(
-				dayjs(token.accessTokenExpires).format("DD/MM/YYYY HH:mm:ss"),
-			);
 
 			if (isTokenExpired(token.accessTokenExpires)) {
-				console.log("refresh_token");
-
+				// FIX: Multiple requests to api
 				return await refreshAccessToken(token);
 			}
 			console.log("----------------------------------");
-
 			console.log("valid");
 			console.log("----------------------------------");
 
 			return token;
+		},
+
+		async signIn({ user, account, profile }) {
+			// para validações ( opcional )
+			if (account?.provider === "google-custom") {
+				return true;
+			}
+			return true;
 		},
 	},
 };

@@ -37,10 +37,6 @@ const SignInForm = () => {
 				redirect: false,
 			});
 
-			console.log("------------------------------------");
-			console.log("RESULT ON SIGNIN MUTATION");
-			console.log(result);
-			console.log("------------------------------------");
 			if (result?.error) {
 				throw new Error(result.error);
 			}

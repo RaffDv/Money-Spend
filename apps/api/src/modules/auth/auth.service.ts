@@ -12,6 +12,7 @@ import { AuthJwtPayload } from "./types/auth-jwtPayload";
 import jwtConfig from "./config/jwt.config";
 import refreshConfig from "./config/refresh.config";
 import { ConfigType } from "@nestjs/config";
+import { Role, User } from "generated/prisma";
 
 @Injectable()
 export class AuthService {
@@ -104,6 +105,24 @@ export class AuthService {
 			name,
 			access_token,
 			refresh_token,
+		};
+	}
+
+	async validateGoogleUser(googleUser: CreateUserDto): Promise<User> {
+		const user = await this.userService.findByEmail(googleUser.email);
+
+		if (user) return user;
+
+		const response = await this.userService.create(googleUser);
+
+		const newUser = { ...response.user };
+		return {
+			id: newUser.id as number,
+			email: newUser.email as string,
+			hashedRefreshToken: newUser.hashedRefreshToken as string,
+			password: newUser.password as string,
+			name: newUser.name as string,
+			role: newUser.role as Role,
 		};
 	}
 }
