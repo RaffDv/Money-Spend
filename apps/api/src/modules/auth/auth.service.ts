@@ -5,11 +5,10 @@ import {
 	UnauthorizedException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { verify } from "argon2";
+import { hash, verify } from "argon2";
 import type { CreateUserDto } from "../user/dto/create-user.dto";
 import { UserService } from "../user/user.service";
 import { AuthJwtPayload } from "./types/auth-jwtPayload";
-import jwtConfig from "./config/jwt.config";
 import refreshConfig from "./config/refresh.config";
 import { ConfigType } from "@nestjs/config";
 import { Role, User } from "generated/prisma";
@@ -46,6 +45,9 @@ export class AuthService {
 
 	async login(userId: number, name: string) {
 		const { access_token, refresh_token } = await this.generateTokens(userId);
+		const hasedRT = await hash(refresh_token);
+
+		await this.userService.updateHRT(userId, hasedRT);
 		return {
 			id: userId,
 			name,
@@ -83,10 +85,17 @@ export class AuthService {
 	}
 
 	// FIX: necessary update to rewoke tokens
-	async validateRefreshToken(userId: number) {
+	async validateRefreshToken(userId: number, refresh_token: string) {
 		const user = await this.userService.findOne(userId);
 
 		if (!user) throw new UnauthorizedException("User not found.");
+		const RTMatched = await verify(
+			user?.hashedRefreshToken as string,
+			refresh_token,
+		);
+
+		if (!RTMatched)
+			throw new UnauthorizedException("Refresh Token is invalid.");
 
 		const currentUser = {
 			id: user.id,
@@ -99,6 +108,9 @@ export class AuthService {
 	// FIX: necessary update to rewoke tokens
 	async refreshToken(userId: number, name: string) {
 		const { access_token, refresh_token } = await this.generateTokens(userId);
+
+		const hasedRT = await hash(refresh_token);
+		await this.userService.updateHRT(userId, hasedRT);
 
 		return {
 			id: userId,
@@ -124,5 +136,11 @@ export class AuthService {
 			name: newUser.name as string,
 			role: newUser.role as Role,
 		};
+	}
+
+	async signOut(userId: number) {
+		console.log("signout invalidate tokens");
+
+		return await this.userService.updateHRT(userId, null);
 	}
 }

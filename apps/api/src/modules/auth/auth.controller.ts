@@ -2,6 +2,8 @@ import {
 	Body,
 	Controller,
 	Get,
+	HttpCode,
+	HttpStatus,
 	Post,
 	Request,
 	Response,
@@ -74,5 +76,12 @@ export class AuthController {
 		redirectUrl.searchParams.append("user", JSON.stringify(rest));
 
 		res.redirect(redirectUrl.toString());
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@HttpCode(HttpStatus.OK)
+	@Post("logout")
+	async signout(@Request() req) {
+		return await this.authService.signOut(req.user.id);
 	}
 }

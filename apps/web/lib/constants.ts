@@ -5,7 +5,7 @@ import { authOptions } from "./auth";
 export const BACKEND_URL = process.env.BACKEND_URL;
 
 export const api = axios.create({
-	baseURL: "http://localhost:4000",
+	baseURL: BACKEND_URL || "http://localhost:4000",
 	headers: {
 		"Content-Type": "application/json",
 	},
@@ -25,22 +25,22 @@ api.interceptors.response.use(
 );
 
 api.interceptors.request.use(
-	async (config) => {
-		try {
-			const session = await getServerSession(authOptions);
+	(config) => {
+		// No servidor, pegar do header da requisição
+		if (typeof window === "undefined") {
+			// Server-side
+			const { headers } = require("next/headers");
+			const headersList = headers();
+			const authToken = headersList.get("x-auth-token");
 
-			if (session?.access_token) {
-				config.headers.Authorization = `Bearer ${session.access_token}`;
+			if (authToken) {
+				config.headers.Authorization = `Bearer ${authToken}`;
 			}
-			console.log(config.url);
-		} catch (error) {
-			console.error(error);
+			console.log(config.headers);
 		}
 
 		return config;
 	},
-	(error) => {
-		return Promise.reject(error);
-	},
+	(error) => Promise.reject(error),
 );
 export const sevenDays = 7 * 24 * 60 * 60 * 1000;

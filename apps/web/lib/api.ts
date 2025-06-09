@@ -18,3 +18,9 @@ export const refreshReq = async (refresh_token: string) => {
 
 	return r;
 };
+
+export const logoutReq = async () => {
+	const r = await api.post("/auth/logout");
+
+	return r;
+};

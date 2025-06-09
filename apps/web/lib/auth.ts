@@ -6,6 +6,7 @@ import {
 	isTokenExpired,
 	refreshAccessToken,
 } from "./utils";
+import { api } from "./constants";
 
 export const authOptions: NextAuthOptions = {
 	session: {

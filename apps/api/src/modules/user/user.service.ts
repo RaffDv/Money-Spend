@@ -45,4 +45,14 @@ export class UserService {
 			},
 		});
 	}
+	async updateHRT(id: number, hasedRT: string | null) {
+		await this.prisma.user.update({
+			data: {
+				hashedRefreshToken: hasedRT,
+			},
+			where: {
+				id,
+			},
+		});
+	}
 }
