@@ -20,12 +20,12 @@ const Page = () => {
 				<CardHeader>
 					<CardTitle>Login Page</CardTitle>
 				</CardHeader>
-				<CardContent>
+				<CardContent className="flex flex-col items-center justify-center">
 					<SignInForm />
-					<div className="flex w-full items-center gap-4">
-						<Separator className="bg-secondary flex-1" />
+					<div className="flex w-full items-center gap-4 mb-2">
+						<Separator className="bg-border flex-1" />
 						<span className="text-muted-foreground text-sm px-2">or</span>
-						<Separator className="bg-secondary flex-1" />
+						<Separator className="bg-border flex-1" />
 					</div>
 					<GoogleLoginButton />
 				</CardContent>

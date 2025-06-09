@@ -10,7 +10,9 @@ export async function GET(request: NextRequest) {
 
 	if (!access_token || !refresh_token || !userString) {
 		console.log("Missing required parameters for Google OAuth callback");
-		return NextResponse.redirect(new URL("/auth/login?error=MissingParams", request.url));
+		return NextResponse.redirect(
+			new URL("/auth/login?error=MissingParams", request.url),
+		);
 	}
 
 	try {
@@ -21,10 +23,9 @@ export async function GET(request: NextRequest) {
 			token: {
 				sub: user.id.toString(),
 				name: user.name,
-				email: user.email,
 				access_token,
 				refresh_token,
-				userId: user.id,
+				id: user.id,
 				accessTokenExpires: Date.now() + 60 * 60 * 1000, // 1 hour
 			},
 			secret: process.env.NEXTAUTH_SECRET!,
@@ -32,17 +33,19 @@ export async function GET(request: NextRequest) {
 
 		// Set NextAuth session cookie
 		const response = NextResponse.redirect(new URL("/dashboard", request.url));
-		
+
 		response.cookies.set(
-			process.env.NODE_ENV === "production" ? "__Secure-next-auth.session-token" : "next-auth.session-token",
+			process.env.NODE_ENV === "production"
+				? "__Secure-next-auth.session-token"
+				: "next-auth.session-token",
 			token,
 			{
 				httpOnly: true,
 				secure: process.env.NODE_ENV === "production",
 				sameSite: "lax",
-				maxAge: 30 * 24 * 60 * 60, // 30 days
+				maxAge: 2 * 60 * 60, // 2h
 				path: "/",
-			}
+			},
 		);
 
 		return response;

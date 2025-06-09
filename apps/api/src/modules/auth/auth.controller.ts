@@ -9,10 +9,10 @@ import {
 } from "@nestjs/common";
 import type { CreateUserDto } from "../user/dto/create-user.dto";
 import { AuthService } from "./auth.service";
-import { LocalAuthGuard } from "./guards/local.guard";
-import { JwtAuthGuard } from "./guards/jwt.guard";
-import { RefreshGuard } from "./guards/refresh.guard";
 import { GoogleGuard } from "./guards/google-oauth.guard";
+import { JwtAuthGuard } from "./guards/jwt.guard";
+import { LocalAuthGuard } from "./guards/local.guard";
+import { RefreshGuard } from "./guards/refresh.guard";
 
 @Controller("auth")
 export class AuthController {
@@ -59,16 +59,19 @@ export class AuthController {
 	@UseGuards(GoogleGuard)
 	@Get("google/callback")
 	async googleCallback(@Request() req, @Response() res) {
-		const user = req.user;
+		const { email, ...rest } = req.user;
 
 		// Redirect back to NextJS with the tokens
 		const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
-		const redirectUrl = new URL(`${frontendUrl}/api/auth/callback/google-custom`);
+
+		const redirectUrl = new URL(
+			`${frontendUrl}/api/auth/callback/google-custom`,
+		);
 
 		// Add the tokens and user data as query params
-		redirectUrl.searchParams.append("access_token", user.access_token);
-		redirectUrl.searchParams.append("refresh_token", user.refresh_token);
-		redirectUrl.searchParams.append("user", JSON.stringify(user));
+		redirectUrl.searchParams.append("access_token", rest.access_token);
+		redirectUrl.searchParams.append("refresh_token", rest.refresh_token);
+		redirectUrl.searchParams.append("user", JSON.stringify(rest));
 
 		res.redirect(redirectUrl.toString());
 	}

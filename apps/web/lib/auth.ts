@@ -10,6 +10,7 @@ import {
 export const authOptions: NextAuthOptions = {
 	session: {
 		strategy: "jwt",
+		maxAge: 2 * 60 * 60, //2 hrs
 	},
 	pages: {
 		signIn: "/auth/login",
@@ -74,10 +75,11 @@ export const authOptions: NextAuthOptions = {
 			if (user) {
 				return {
 					...token,
-					userId: user.id,
+					id: user.id,
 					access_token: user.access_token,
 					refresh_token: user.refresh_token,
 					accessTokenExpires: getTokenExpiration(user.access_token),
+					exp: getTokenExpiration(user.refresh_token),
 				};
 			}
 
@@ -85,9 +87,6 @@ export const authOptions: NextAuthOptions = {
 				// FIX: Multiple requests to api
 				return await refreshAccessToken(token);
 			}
-			console.log("----------------------------------");
-			console.log("valid");
-			console.log("----------------------------------");
 
 			return token;
 		},

@@ -5,6 +5,7 @@ import utc from "dayjs/plugin/utc";
 import type { JWT } from "next-auth/jwt";
 import { twMerge } from "tailwind-merge";
 import { refreshReq } from "./api";
+import { signOut } from "next-auth/react";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -30,7 +31,6 @@ export async function refreshAccessToken(token: JWT) {
 			accessTokenExpires: expiration.valueOf(),
 		};
 	} catch (error) {
-		console.log("Erro ao renovar token:", error);
 		return {
 			...token,
 		};
