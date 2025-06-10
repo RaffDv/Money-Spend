@@ -69,18 +69,21 @@ export const authOptions: NextAuthOptions = {
 				user: {
 					...session.user,
 					id: token.id,
+					role: token.role,
 				},
 			};
 		},
 		jwt: async ({ token, user }) => {
 			if (user) {
+				console.log(user);
+
 				return {
 					...token,
 					id: user.id,
 					access_token: user.access_token,
 					refresh_token: user.refresh_token,
 					accessTokenExpires: getTokenExpiration(user.access_token),
-					exp: getTokenExpiration(user.refresh_token),
+					role: user.role,
 				};
 			}
 

@@ -13,6 +13,7 @@ import { RefreshStrategy } from "./strategies/refresh.strategy";
 import { GoogleStrategy } from "./strategies/google.strategy";
 import { APP_GUARD } from "@nestjs/core";
 import { JwtAuthGuard } from "./guards/jwt.guard";
+import { RolesGuard } from "./guards/roles.guard";
 
 @Module({
 	imports: [
@@ -32,6 +33,10 @@ import { JwtAuthGuard } from "./guards/jwt.guard";
 		{
 			provide: APP_GUARD,
 			useClass: JwtAuthGuard,
+		},
+		{
+			provide: APP_GUARD,
+			useClass: RolesGuard,
 		},
 	],
 	exports: [AuthService],

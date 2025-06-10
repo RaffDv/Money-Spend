@@ -42,6 +42,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
 		// Return user data with backend tokens
 		done(null, {
 			id: user.id,
+			role: user.role,
 			name: user.name,
 			email: profile.emails[0].value,
 			access_token: tokens.access_token,

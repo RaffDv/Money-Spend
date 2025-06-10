@@ -1,10 +1,21 @@
 import GlobalErrorHandler from "@/components/globalErrorHandler";
 import { authOptions } from "@/lib/auth";
+import { api } from "@/lib/constants";
 import { getServerSession } from "next-auth";
 
 const Page = async () => {
 	const session = await getServerSession(authOptions);
 	console.log(session);
+	try {
+		const r = await api.get("/auth/protected");
+		if (r.status !== 200) {
+			console.error(r.data);
+		}
+
+		console.log("response from protected: ", r.data);
+	} catch (error) {
+		console.error(error);
+	}
 
 	return (
 		<>

@@ -40,16 +40,18 @@ export class AuthService {
 		if (!isPasswordMatched)
 			throw new UnauthorizedException("Credentials are incorrect");
 
-		return { id: user.id, name: user.name };
+		return { id: user.id, name: user.name, role: user.role };
 	}
 
 	async login(userId: number, name: string) {
 		const { access_token, refresh_token } = await this.generateTokens(userId);
+		const user = await this.userService.findOne(userId);
 		const hasedRT = await hash(refresh_token);
 
 		await this.userService.updateHRT(userId, hasedRT);
 		return {
 			id: userId,
+			role: user?.role,
 			name,
 			access_token,
 			refresh_token,
@@ -79,6 +81,7 @@ export class AuthService {
 
 		const currentUser = {
 			id: user.id,
+			role: user.role,
 		};
 
 		return currentUser;
@@ -130,6 +133,7 @@ export class AuthService {
 		const newUser = { ...response.user };
 		return {
 			id: newUser.id as number,
+			publicId: newUser.publicId as string,
 			email: newUser.email as string,
 			hashedRefreshToken: newUser.hashedRefreshToken as string,
 			password: newUser.password as string,

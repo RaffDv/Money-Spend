@@ -7,12 +7,14 @@ declare module "next-auth" {
 		name: string;
 		access_token: string;
 		refresh_token: string;
+		role: string;
 	}
 
 	interface Session {
 		user: {
 			id: string;
 			name: string;
+			role: string;
 		};
 		access_token: string;
 		refresh_token: string;
@@ -28,5 +30,6 @@ declare module "next-auth/jwt" {
 		access_token: string;
 		refresh_token: string;
 		accessTokenExpires: number;
+		role: string;
 	}
 }

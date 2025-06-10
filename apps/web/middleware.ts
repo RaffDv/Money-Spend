@@ -2,6 +2,7 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
+// Defina suas rotas e roles necessários
 const PROTECTED_ROUTES = {
 	"/dashboard": ["user", "admin"],
 } as const;
@@ -13,8 +14,6 @@ export default withAuth(
 		if (!token) {
 			return NextResponse.redirect(new URL("/auth/login", req.nextUrl));
 		}
-		const requestHeaders = new Headers(req.headers);
-		requestHeaders.set("x-auth-token", token.access_token);
 		return NextResponse.next();
 	},
 	{

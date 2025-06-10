@@ -25,19 +25,12 @@ api.interceptors.response.use(
 );
 
 api.interceptors.request.use(
-	(config) => {
-		// No servidor, pegar do header da requisição
-		if (typeof window === "undefined") {
-			// Server-side
-			const { headers } = require("next/headers");
-			const headersList = headers();
-			const authToken = headersList.get("x-auth-token");
-
-			if (authToken) {
-				config.headers.Authorization = `Bearer ${authToken}`;
-			}
-			console.log(config.headers);
+	async (config) => {
+		const session = await getServerSession(authOptions);
+		if (session?.access_token) {
+			config.headers.Authorization = `Bearer ${session.access_token}`;
 		}
+		console.log(config.headers);
 
 		return config;
 	},

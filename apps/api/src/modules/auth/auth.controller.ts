@@ -15,6 +15,9 @@ import { GoogleGuard } from "./guards/google-oauth.guard";
 import { LocalAuthGuard } from "./guards/local.guard";
 import { RefreshGuard } from "./guards/refresh.guard";
 import { Public } from "./decorators/public.decorator";
+import { Roles } from "./decorators/roles.decorator";
+import { RolesGuard } from "./guards/roles.guard";
+import { JwtAuthGuard } from "./guards/jwt.guard";
 
 @Controller("auth")
 export class AuthController {
@@ -49,6 +52,7 @@ export class AuthController {
 	@Get("google/callback")
 	async googleCallback(@Request() req, @Response() res) {
 		const { email, ...rest } = req.user;
+		console.log(rest);
 
 		const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
 
@@ -88,5 +92,12 @@ export class AuthController {
 		return await this.authService.signOut(req.user.id);
 	}
 
+	@Roles("ADMIN", "USER")
+	@Get("protected")
+	protected(@Request() req) {
+		return {
+			message: `Protected route, admin only, if you access this you can see you public id ${req.user.id}`,
+		};
+	}
 	// ---------------------------------------------
 }

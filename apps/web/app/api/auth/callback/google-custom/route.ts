@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
 				sub: user.id.toString(),
 				name: user.name,
 				access_token,
+				role: user.role,
 				refresh_token,
 				id: user.id,
 				accessTokenExpires: Date.now() + 60 * 60 * 1000, // 1 hour
