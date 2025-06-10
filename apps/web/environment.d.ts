@@ -3,8 +3,8 @@ declare global {
 		interface ProcessEnv {
 			BACKEND_URL: string;
 			SESSION_SECRET_KEY: string;
-			GOOGLE_CLIENT_ID: string;
-			GOOGLE_CLIENT_SECRET: string;
+			Google_CLIENT_ID: string;
+			Google_CLIENT_SECRET: string;
 		}
 	}
 }

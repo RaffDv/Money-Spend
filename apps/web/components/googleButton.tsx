@@ -5,7 +5,7 @@ import GoogleIcon from "./icons/googleIcon";
 const GoogleLoginButton = () => {
 	const handleGoogleSignIn = () => {
 		// This will redirect to your backend Google OAuth endpoint
-		window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google/login`;
+		window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/Google/login`;
 	};
 
 	return (

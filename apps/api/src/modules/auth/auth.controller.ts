@@ -12,20 +12,17 @@ import {
 import type { CreateUserDto } from "../user/dto/create-user.dto";
 import { AuthService } from "./auth.service";
 import { GoogleGuard } from "./guards/google-oauth.guard";
-import { JwtAuthGuard } from "./guards/jwt.guard";
 import { LocalAuthGuard } from "./guards/local.guard";
 import { RefreshGuard } from "./guards/refresh.guard";
+import { Public } from "./decorators/public.decorator";
 
 @Controller("auth")
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
-	@Post("register")
-	async register(@Body() body: CreateUserDto) {
-		return await this.authService.register(body);
-	}
 
-	// logins area
-	// local login
+	// ---------------------------------------------
+	// ------------- LOCAL SECTION -----------------
+	@Public()
 	@UseGuards(LocalAuthGuard)
 	@Post("login")
 	login(@Request() req) {
@@ -33,20 +30,48 @@ export class AuthController {
 		return this.authService.login(id, name);
 	}
 
-	//google login
+	@Public()
+	@Post("register")
+	async register(@Body() body: CreateUserDto) {
+		return await this.authService.register(body);
+	}
+	// ---------------------------------------------
+
+	// ---------------------------------------------
+	// ------------- GOOGLE SECTION ----------------
+	@Public()
 	@UseGuards(GoogleGuard)
-	@Get("google/login") // get http://localhost:4000/auth/google/login return me to choose google account page
+	@Get("google/login")
 	googleLogin() {}
 
-	// TODO: GITHUB LOGIN
-	//
+	@Public()
+	@UseGuards(GoogleGuard)
+	@Get("google/callback")
+	async googleCallback(@Request() req, @Response() res) {
+		const { email, ...rest } = req.user;
 
-	@UseGuards(JwtAuthGuard)
-	@Get("protected")
-	getAnything(@Request() req) {
-		return `Protected Route !! You can access this, your ID is ${req.user.id}`;
+		const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+
+		const redirectUrl = new URL(
+			`${frontendUrl}/api/auth/callback/google-custom`,
+		);
+
+		redirectUrl.searchParams.append("access_token", rest.access_token);
+		redirectUrl.searchParams.append("refresh_token", rest.refresh_token);
+		redirectUrl.searchParams.append("user", JSON.stringify(rest));
+
+		res.redirect(redirectUrl.toString());
 	}
+	// ---------------------------------------------
 
+	// ---------------------------------------------
+	// ------------- GITHUB SECTION ----------------
+
+	// ---------------------------------------------
+
+	// ---------------------------------------------
+	// ------------- OTHERS SECTION ----------------
+	@Public()
 	@UseGuards(RefreshGuard)
 	@Post("refresh")
 	refreshToken(@Request() req) {
@@ -57,31 +82,11 @@ export class AuthController {
 		return this.authService.refreshToken(id, name);
 	}
 
-	// callback area
-	@UseGuards(GoogleGuard)
-	@Get("google/callback")
-	async googleCallback(@Request() req, @Response() res) {
-		const { email, ...rest } = req.user;
-
-		// Redirect back to NextJS with the tokens
-		const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
-
-		const redirectUrl = new URL(
-			`${frontendUrl}/api/auth/callback/google-custom`,
-		);
-
-		// Add the tokens and user data as query params
-		redirectUrl.searchParams.append("access_token", rest.access_token);
-		redirectUrl.searchParams.append("refresh_token", rest.refresh_token);
-		redirectUrl.searchParams.append("user", JSON.stringify(rest));
-
-		res.redirect(redirectUrl.toString());
-	}
-
-	@UseGuards(JwtAuthGuard)
 	@HttpCode(HttpStatus.OK)
 	@Post("logout")
 	async signout(@Request() req) {
 		return await this.authService.signOut(req.user.id);
 	}
+
+	// ---------------------------------------------
 }

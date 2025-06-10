@@ -36,18 +36,18 @@ export const authOptions: NextAuthOptions = {
 			},
 		}),
 		{
-			id: "google-custom",
+			id: "Google-custom",
 			name: "Google",
 			type: "oauth",
 			authorization: {
-				url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google/login`,
+				url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/Google/login`,
 				params: {
 					scope: "email profile",
 					response_type: "code",
 				},
 			},
-			clientId: process.env.GOOGLE_CLIENT_ID,
-			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+			clientId: process.env.Google_CLIENT_ID,
+			clientSecret: process.env.Google_CLIENT_SECRET,
 			profile(profile, tokens) {
 				return {
 					id: profile.id as string,
@@ -94,7 +94,7 @@ export const authOptions: NextAuthOptions = {
 
 		async signIn({ user, account, profile }) {
 			// para validações ( opcional )
-			if (account?.provider === "google-custom") {
+			if (account?.provider === "Google-custom") {
 				return true;
 			}
 			return true;

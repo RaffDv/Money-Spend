@@ -2,7 +2,7 @@ export default function GoogleIcon({ className = "w-5 h-5", ...props }) {
 	return (
 		// biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
 		<svg
-			name="google logo"
+			name="Google logo"
 			className={className}
 			viewBox="0 0 24 24"
 			{...props}
