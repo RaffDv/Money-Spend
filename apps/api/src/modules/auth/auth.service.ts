@@ -43,15 +43,14 @@ export class AuthService {
 		return { id: user.id, name: user.name, role: user.role };
 	}
 
-	async login(userId: number, name: string) {
+	async login(userId: number, name: string, role: Role) {
 		const { access_token, refresh_token } = await this.generateTokens(userId);
-		const user = await this.userService.findOne(userId);
 		const hasedRT = await hash(refresh_token);
 
 		await this.userService.updateHRT(userId, hasedRT);
 		return {
 			id: userId,
-			role: user?.role,
+			role,
 			name,
 			access_token,
 			refresh_token,

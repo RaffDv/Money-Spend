@@ -6,6 +6,7 @@ import {
 	HttpStatus,
 	Post,
 	Request,
+	Res,
 	Response,
 	UseGuards,
 } from "@nestjs/common";
@@ -16,21 +17,38 @@ import { LocalAuthGuard } from "./guards/local.guard";
 import { RefreshGuard } from "./guards/refresh.guard";
 import { Public } from "./decorators/public.decorator";
 import { Roles } from "./decorators/roles.decorator";
-import { RolesGuard } from "./guards/roles.guard";
-import { JwtAuthGuard } from "./guards/jwt.guard";
+import { Response as ResExpress } from "express";
+import { ConfigService } from "@nestjs/config";
 
 @Controller("auth")
 export class AuthController {
-	constructor(private readonly authService: AuthService) {}
+	constructor(
+		private readonly authService: AuthService,
+		private readonly configService: ConfigService,
+	) {}
 
 	// ---------------------------------------------
 	// ------------- LOCAL SECTION -----------------
 	@Public()
 	@UseGuards(LocalAuthGuard)
 	@Post("login")
-	login(@Request() req) {
-		const { id, name } = req.user;
-		return this.authService.login(id, name);
+	async login(@Request() req, @Res({ passthrough: true }) res: ResExpress) {
+		const { id, name, role } = req.user;
+		const user = await this.authService.login(id, name, role);
+
+		res.cookie("refresh_token", user.refresh_token, {
+			domain: this.configService.get<string>("APP_URL"),
+			httpOnly: true,
+			secure: true,
+		});
+
+		res.cookie("access_token", user.access_token, {
+			domain: this.configService.get<string>("APP_URL"),
+			httpOnly: true,
+			secure: true,
+		});
+
+		return { ...user };
 	}
 
 	@Public()

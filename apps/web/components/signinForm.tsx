@@ -11,6 +11,7 @@ import { type SubmitHandler, useForm } from "react-hook-form";
 import type { z } from "zod";
 import FormField from "./formField";
 import SubmitButton from "./submitButton";
+import { loginReq } from "@/lib/api";
 
 type fields = {
 	email: string;
@@ -31,6 +32,7 @@ const SignInForm = () => {
 	const router = useRouter();
 	const mutation = useMutation({
 		mutationFn: async (data: signInType) => {
+			const backendResult = await loginReq(data);
 			const result = await signIn("credentials", {
 				email: data.email,
 				password: data.password,
@@ -51,7 +53,6 @@ const SignInForm = () => {
 		},
 	});
 	const onSubmit: SubmitHandler<fields> = async (data) => {
-		console.log(data);
 		const validatedInputs = SignInFormSchema.safeParse(data);
 		if (validatedInputs.success) {
 			await mutation.mutateAsync(data);

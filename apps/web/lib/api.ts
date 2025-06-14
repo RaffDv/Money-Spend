@@ -8,8 +8,11 @@ export const signUpReq = async (data: signUpFormType) =>
 	(await api.post("/auth/register", data)).data;
 
 type loginType = z.infer<typeof SignInFormSchema>;
-export const loginReq = async (data: loginType) =>
-	(await api.post("/auth/login", data)).data;
+export const loginReq = async (data: loginType) => {
+	const resp = await api.post("/auth/login", data);
+
+	return resp.data;
+};
 
 export const refreshReq = async (refresh_token: string) => {
 	const r = await axios.post("http://localhost:4000/auth/refresh", {

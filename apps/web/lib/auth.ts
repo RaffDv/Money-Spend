@@ -27,12 +27,19 @@ export const authOptions: NextAuthOptions = {
 				password: { label: "Password", type: "password" },
 			},
 			async authorize(credentials) {
-				const result = await loginReq({
-					email: credentials?.email as string,
-					password: credentials?.password as string,
+				const result = await fetch(`${process.env.BACKEND_URL}/auth/login`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					credentials: "include", // Essencial para cookies
+					body: JSON.stringify({
+						email: credentials?.email,
+						password: credentials?.password,
+					}),
 				});
 				if (!result) throw new Error("auth.ts | error on request");
-				return result;
+				return await result.json();
 			},
 		}),
 		{
@@ -52,10 +59,9 @@ export const authOptions: NextAuthOptions = {
 				return {
 					id: profile.id as string,
 					name: profile.name as string,
-					email: profile.email as string,
+					role: profile.role as string,
 					access_token: tokens.access_token as string,
 					refresh_token: tokens.refresh_token as string,
-					image: null,
 				};
 			},
 		},

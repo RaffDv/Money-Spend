@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { encode } from "next-auth/jwt";
+import { getTokenExpiration } from "@/lib/utils";
 
 export async function GET(request: NextRequest) {
 	const { searchParams } = new URL(request.url);
@@ -23,11 +24,11 @@ export async function GET(request: NextRequest) {
 			token: {
 				sub: user.id.toString(),
 				name: user.name,
-				access_token,
 				role: user.role,
-				refresh_token,
 				id: user.id,
-				accessTokenExpires: Date.now() + 60 * 60 * 1000, // 1 hour
+				access_token,
+				refresh_token,
+				accessTokenExpires: getTokenExpiration(access_token),
 			},
 			secret: process.env.NEXTAUTH_SECRET!,
 		});

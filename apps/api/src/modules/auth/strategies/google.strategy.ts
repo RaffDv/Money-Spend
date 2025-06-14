@@ -37,7 +37,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
 				"User cannot create an account or login in app ",
 			);
 		}
-		const tokens = await this.authService.login(user.id, user.name);
+		const tokens = await this.authService.login(user.id, user.name, user.role);
 
 		// Return user data with backend tokens
 		done(null, {
