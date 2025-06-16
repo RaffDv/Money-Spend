@@ -1,20 +1,14 @@
 module.exports = {
   apps: [
     {
-      name: 'next-js-app',
+      name: 'bankblend web',
+      script: 'pnpm',
+      args: 'start -H 0.0.0.0 -p 3000',
       cwd: '/home/ubuntu/Money-Spend/apps/web',
-      script: '/home/ubuntu/Money-Spend/apps/web/node_modules/next/dist/bin/next start',
       env: {
-        PORT: 3000,
         NODE_ENV: 'production',
-      },
-       watch: true,
-      watch_delay: 1000,
-      ignore_watch: ['node_modules', 'logs'], // Ignore changes in these directories
-      watch_options: {
-        followSymlinks: false,
-      },
-    },
+        PORT: 3000
+      }
+    }
   ]
 }
-
