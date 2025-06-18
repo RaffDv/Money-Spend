@@ -25,17 +25,4 @@ api.interceptors.response.use(
 	},
 );
 
-// api.interceptors.request.use(
-// 	async (config) => {
-// 		if (window) return config;
-// 		const session = await getServerSession(authOptions);
-// 		if (session?.access_token) {
-// 			config.headers.Authorization = `Bearer ${session.access_token}`;
-// 		}
-// 		console.log(config.headers);
-//
-// 		return config;
-// 	},
-// 	(error) => Promise.reject(error),
-// );
 export const sevenDays = 7 * 24 * 60 * 60 * 1000;

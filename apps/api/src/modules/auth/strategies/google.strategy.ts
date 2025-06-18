@@ -27,9 +27,13 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
 		profile: any,
 		done: VerifyCallback,
 	) {
+		console.log(profile);
+
 		const user: User = await this.authService.validateGoogleUser({
 			email: profile.emails[0].value,
-			name: profile.displayName,
+			fullname: profile.displayName,
+			username: profile.displayName,
+			pictureURL: profile.photos[0].value,
 			password: "",
 		});
 		if (!user.id) {
@@ -37,16 +41,14 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
 				"User cannot create an account or login in app ",
 			);
 		}
-		const tokens = await this.authService.login(user.id, user.name, user.role);
+		const tokens = await this.authService.login(
+			user.id,
+			user.fullname,
+			user.username,
+			user.role,
+		);
 
 		// Return user data with backend tokens
-		done(null, {
-			id: user.id,
-			role: user.role,
-			name: user.name,
-			email: profile.emails[0].value,
-			access_token: tokens.access_token,
-			refresh_token: tokens.refresh_token,
-		});
+		done(null, { ...user, ...tokens });
 	}
 }

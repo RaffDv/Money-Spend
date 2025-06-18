@@ -33,8 +33,8 @@ export class AuthController {
 	@UseGuards(LocalAuthGuard)
 	@Post("login")
 	async login(@Request() req, @Res({ passthrough: true }) res: ResExpress) {
-		const { id, name, role } = req.user;
-		const user = await this.authService.login(id, name, role);
+		const { id, fullname, username, role } = req.user;
+		const user = await this.authService.login(id, fullname, username, role);
 
 		res.cookie("refresh_token", user.refresh_token, {
 			domain: this.configService.get<string>("APP_URL"),
@@ -97,11 +97,11 @@ export class AuthController {
 	@UseGuards(RefreshGuard)
 	@Post("refresh")
 	refreshToken(@Request() req) {
-		const { id, name } = req.user;
+		const { id, fullname, username } = req.user;
 
 		console.log(req.user);
 
-		return this.authService.refreshToken(id, name);
+		return this.authService.refreshToken(id, fullname, username);
 	}
 
 	@HttpCode(HttpStatus.OK)

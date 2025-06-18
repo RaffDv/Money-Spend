@@ -11,13 +11,19 @@ type loginType = z.infer<typeof SignInFormSchema>;
 export const loginReq = async (data: loginType) => {
 	const resp = await api.post("/auth/login", data);
 
-	return resp.data;
+	return resp;
 };
 
 export const refreshReq = async (refresh_token: string) => {
-	const r = await axios.post("http://localhost:4000/auth/refresh", {
-		refresh_token,
-	});
+	const r = await axios.post(
+		`${process.env.BACKEND_URL}/auth/refresh`,
+		{},
+		{
+			headers: {
+				Cookie: `refresh_token=${refresh_token};`,
+			},
+		},
+	);
 
 	return r;
 };

@@ -12,6 +12,7 @@ import { AuthJwtPayload } from "./types/auth-jwtPayload";
 import refreshConfig from "./config/refresh.config";
 import { ConfigType } from "@nestjs/config";
 import { Role, User } from "generated/prisma";
+import { string } from "zod";
 
 @Injectable()
 export class AuthService {
@@ -27,7 +28,14 @@ export class AuthService {
 
 		if (user) throw new ConflictException("User already exists!");
 
-		return await this.userService.create(createUserDto);
+		const { user: createdUser } = await this.userService.create(createUserDto);
+		return {
+			fullname: createdUser?.fullname,
+			username: createdUser?.username,
+			pictureURL: createdUser?.pictureURL,
+			role: createdUser?.role,
+			id: createdUser?.id,
+		};
 	}
 
 	async validateUser(email: string, password: string) {
@@ -40,10 +48,15 @@ export class AuthService {
 		if (!isPasswordMatched)
 			throw new UnauthorizedException("Credentials are incorrect");
 
-		return { id: user.id, name: user.name, role: user.role };
+		return {
+			id: user.id,
+			fullname: user.fullname,
+			username: user.username,
+			role: user.role,
+		};
 	}
 
-	async login(userId: number, name: string, role: Role) {
+	async login(userId: number, fullname: string, username: string, role: Role) {
 		const { access_token, refresh_token } = await this.generateTokens(userId);
 		const hasedRT = await hash(refresh_token);
 
@@ -51,7 +64,8 @@ export class AuthService {
 		return {
 			id: userId,
 			role,
-			name,
+			fullname,
+			username,
 			access_token,
 			refresh_token,
 		};
@@ -101,14 +115,15 @@ export class AuthService {
 
 		const currentUser = {
 			id: user.id,
-			name: user.name,
+			fullname: user.fullname,
+			username: user.username,
 		};
 
 		return currentUser;
 	}
 
 	// FIX: necessary update to rewoke tokens
-	async refreshToken(userId: number, name: string) {
+	async refreshToken(userId: number, fullname: string, username: string) {
 		const { access_token, refresh_token } = await this.generateTokens(userId);
 
 		const hasedRT = await hash(refresh_token);
@@ -116,7 +131,8 @@ export class AuthService {
 
 		return {
 			id: userId,
-			name,
+			fullname,
+			username,
 			access_token,
 			refresh_token,
 		};
@@ -132,11 +148,13 @@ export class AuthService {
 		const newUser = { ...response.user };
 		return {
 			id: newUser.id as number,
+			pictureURL: newUser.pictureURL as string,
 			publicId: newUser.publicId as string,
 			email: newUser.email as string,
 			hashedRefreshToken: newUser.hashedRefreshToken as string,
 			password: newUser.password as string,
-			name: newUser.name as string,
+			fullname: newUser.fullname as string,
+			username: newUser.fullname as string,
 			role: newUser.role as Role,
 		};
 	}

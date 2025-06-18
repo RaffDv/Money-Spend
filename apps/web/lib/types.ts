@@ -11,7 +11,11 @@ export type FormState =
 	| undefined;
 
 export const SignUpFormSchema = z.object({
-	name: z
+	fullname: z
+		.string()
+		.min(2, { message: "Name must be at least 2 characters long." })
+		.trim(),
+	username: z
 		.string()
 		.min(2, { message: "Name must be at least 2 characters long." })
 		.trim(),

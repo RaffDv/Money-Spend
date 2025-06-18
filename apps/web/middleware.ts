@@ -1,5 +1,6 @@
 // middleware.ts
 import { withAuth } from "next-auth/middleware";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 // Defina suas rotas e roles necessários
@@ -36,5 +37,5 @@ export default withAuth(
 );
 
 export const config = {
-	matcher: ["/dashboard/:path*"],
+	matcher: ["/dashboard/:path*", "/api/:path*"],
 };

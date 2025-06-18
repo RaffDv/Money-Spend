@@ -23,7 +23,9 @@ export async function GET(request: NextRequest) {
 		const token = await encode({
 			token: {
 				sub: user.id.toString(),
-				name: user.name,
+				fullname: user.fullname,
+				username: user.username,
+				picture: user.pictureURL,
 				role: user.role,
 				id: user.id,
 				access_token,
@@ -34,8 +36,20 @@ export async function GET(request: NextRequest) {
 		});
 
 		// Set NextAuth session cookie
-		const response = NextResponse.redirect(new URL("/dashboard", request.url));
+		const response = NextResponse.redirect(new URL("/", request.url));
 
+		response.cookies.set("access_token", access_token, {
+			httpOnly: true,
+			secure: true,
+			path: "/",
+			domain: process.env.HOST,
+		});
+		response.cookies.set("refresh_token", refresh_token, {
+			httpOnly: true,
+			secure: true,
+			path: "/",
+			domain: process.env.HOST,
+		});
 		response.cookies.set(
 			process.env.NODE_ENV === "production"
 				? "__Secure-next-auth.session-token"
