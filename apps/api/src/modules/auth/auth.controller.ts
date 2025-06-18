@@ -68,11 +68,11 @@ export class AuthController {
 	@Public()
 	@UseGuards(GoogleGuard)
 	@Get("google/callback")
-	async googleCallback(@Request() req, @Response() res) {
+	async googleCallback(@Request() req, @Res() res:ResExpress) {
 		const { email, ...rest } = req.user;
 		console.log(rest);
 
-		const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+		const frontendUrl = process.env.FRONTEND_URL
 
 		const redirectUrl = new URL(
 			`${frontendUrl}/api/auth/callback/google-custom`,
@@ -82,6 +82,17 @@ export class AuthController {
 		redirectUrl.searchParams.append("refresh_token", rest.refresh_token);
 		redirectUrl.searchParams.append("user", JSON.stringify(rest));
 
+		res.cookie("refresh_token", rest.refresh_token, {
+			domain: this.configService.get<string>("APP_URL"),
+			httpOnly: true,
+			secure: true,
+		});
+
+		res.cookie("access_token", rest.access_token, {
+			domain: this.configService.get<string>("APP_URL"),
+			httpOnly: true,
+			secure: true,
+		});
 		res.redirect(redirectUrl.toString());
 	}
 	// ---------------------------------------------
