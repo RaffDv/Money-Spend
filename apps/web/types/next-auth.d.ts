@@ -18,7 +18,7 @@ declare module "next-auth" {
 			fullname: string;
 			username: string;
 			role: string;
-			pictureURL?: string;
+			pictureURL?: string | null;
 		};
 		access_token: string;
 		refresh_token: string;
