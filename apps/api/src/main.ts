@@ -8,11 +8,9 @@ async function bootstrap() {
 	app.use(cookieParser(process.env.COOKIE_SECRET));
 	app.useGlobalPipes(new ValidationPipe());
 	app.enableCors({
-		origin: "http://localhost:3000",
+		origin: "https://bankblend.com.br",
 		credentials: true,
 	});
-	await app.listen(process.env.PORT ?? 4000, () => {
-		console.log(`Server running on http://localhost:${process.env.PORT}`);
-	});
+  await app.listen(4000,'0.0.0.0')
 }
 bootstrap();

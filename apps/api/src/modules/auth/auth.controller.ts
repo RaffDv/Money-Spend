@@ -75,7 +75,7 @@ export class AuthController {
 		const frontendUrl = process.env.FRONTEND_URL
 
 		const redirectUrl = new URL(
-			`${frontendUrl}/api/auth/callback/google-custom`,
+			`https://${frontendUrl}/api/auth/callback/google-custom`,
 		);
 
 		redirectUrl.searchParams.append("access_token", rest.access_token);
