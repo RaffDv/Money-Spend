@@ -32,7 +32,7 @@ const SignInForm = () => {
 	const router = useRouter();
 	const mutation = useMutation({
 		mutationFn: async (data: signInType) => {
-			const backendResult = await loginReq(data);
+			// const backendResult = await loginReq(data);
 			const result = await signIn("credentials", {
 				email: data.email,
 				password: data.password,
@@ -60,7 +60,7 @@ const SignInForm = () => {
 	};
 
 	return (
-		<>
+		<div className="w-full min-w-96">
 			<AnimatePresence>
 				{mutation.isError && (
 					<motion.div
@@ -75,21 +75,18 @@ const SignInForm = () => {
 					</motion.div>
 				)}
 			</AnimatePresence>
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				className="w-full max-w-80 h-fit p-3"
-			>
-				<div className="flex flex-col gap-2">
-					<FormField
-						register={register}
-						type="email"
-						name="email"
-						error={errors.email}
-						placeholder="email@example.com"
-					>
-						Email
-					</FormField>
+			<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+				<FormField
+					register={register}
+					type="email"
+					name="email"
+					error={errors.email}
+					placeholder="email@example.com"
+				>
+					Email
+				</FormField>
 
+				<div>
 					<FormField
 						register={register}
 						type="password"
@@ -109,7 +106,7 @@ const SignInForm = () => {
 					<span>Login</span>
 				</SubmitButton>
 			</form>{" "}
-		</>
+		</div>
 	);
 };
 

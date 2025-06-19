@@ -8,9 +8,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { signIn } from "next-auth/react";
 import GoogleLoginButton from "@/components/googleButton";
 
 const Page = () => {
@@ -22,7 +20,7 @@ const Page = () => {
 				</CardHeader>
 				<CardContent className="flex flex-col items-center justify-center">
 					<SignInForm />
-					<div className="flex w-full items-center gap-4 mb-2">
+					<div className="flex w-full items-center gap-4 my-2">
 						<Separator className="bg-border flex-1" />
 						<span className="text-muted-foreground text-sm px-2">or</span>
 						<Separator className="bg-border flex-1" />
@@ -30,7 +28,7 @@ const Page = () => {
 					<GoogleLoginButton />
 				</CardContent>
 				<CardFooter>
-					<div className="flex justify-between text-sm">
+					<div className="flex justify-between text-sm space-x-0.5">
 						<p> Don't have an account? </p>
 						<Link href={"/auth/register"}>
 							<span className="underline"> Register</span>

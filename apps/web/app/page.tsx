@@ -3,11 +3,7 @@ import { Button } from "@/components/ui/button";
 import { signOut } from "next-auth/react";
 
 const Page = () => {
-	return (
-		<div>
-			<Button onClick={async () => await signOut()}>Sign Out</Button>
-		</div>
-	);
+	return <span>Intinal page</span>;
 };
 
 export default Page;

@@ -8,6 +8,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import GoogleLoginButton from "@/components/googleButton";
+import { Separator } from "@/components/ui/separator";
 
 const Page = () => {
 	return (
@@ -16,11 +18,17 @@ const Page = () => {
 				<CardHeader>
 					<CardTitle>Register Page</CardTitle>
 				</CardHeader>
-				<CardContent>
+				<CardContent className="flex flex-col items-center justify-center">
 					<SignUpForm />
+					<div className="flex w-full items-center gap-4 my-2">
+						<Separator className="bg-border flex-1" />
+						<span className="text-muted-foreground text-sm px-2">or</span>
+						<Separator className="bg-border flex-1" />
+					</div>
+					<GoogleLoginButton />
 				</CardContent>
 				<CardFooter>
-					<div className="flex justify-between text-sm">
+					<div className="flex justify-between text-sm space-x-0.5">
 						<p>Already have an account? </p>
 						<Link href={"/auth/login"}>
 							<span className="underline"> Sign In</span>

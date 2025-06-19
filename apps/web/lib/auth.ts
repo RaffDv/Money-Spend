@@ -6,7 +6,7 @@ import {
 	isTokenExpired,
 	refreshAccessToken,
 } from "./utils";
-import { api } from "./constants";
+import { cookies } from "next/headers";
 
 export const authOptions: NextAuthOptions = {
 	session: {
@@ -27,19 +27,47 @@ export const authOptions: NextAuthOptions = {
 				password: { label: "Password", type: "password" },
 			},
 			async authorize(credentials) {
-				const result = await fetch(`${process.env.BACKEND_URL}/auth/login`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					credentials: "include", // Essencial para cookies
-					body: JSON.stringify({
-						email: credentials?.email,
-						password: credentials?.password,
-					}),
+				const response = await loginReq({
+					email: credentials?.email as string,
+					password: credentials?.password as string,
 				});
-				if (!result) throw new Error("auth.ts | error on request");
-				return await result.json();
+
+				const setCookieHeader = response.headers["set-cookie"];
+
+				const tokens: Record<string, string> = {};
+
+				if (setCookieHeader) {
+					// biome-ignore lint/complexity/noForEach: <explanation>
+					setCookieHeader.forEach((cookie: string) => {
+						const [cookieData] = cookie.split(";");
+
+						if (!cookieData) return null;
+						const [name, value] = cookieData.split("=");
+
+						// Assumindo que seus tokens têm nomes específicos
+						if (
+							name?.includes("access_token") ||
+							name?.includes("refresh_token")
+						) {
+							if (!value) return null;
+							tokens[name.trim()] = value.trim();
+						}
+					});
+				}
+				const cookiesStorage = await cookies();
+
+				Object.entries(tokens).map(([name, value]) => {
+					cookiesStorage.set(name, value, {
+						httpOnly: true,
+						secure: true,
+						path: "/",
+						domain: process.env.HOST,
+					});
+				});
+				if (response.data?.error) throw new Error("auth.ts | error on request");
+				return await {
+					...response.data,
+				};
 			},
 		}),
 		{
@@ -58,10 +86,12 @@ export const authOptions: NextAuthOptions = {
 			profile(profile, tokens) {
 				return {
 					id: profile.id as string,
-					name: profile.name as string,
+					fullname: profile.name as string,
+					username: profile.username as string,
 					role: profile.role as string,
 					access_token: tokens.access_token as string,
 					refresh_token: tokens.refresh_token as string,
+					pictureURL: profile.pictureURL,
 				};
 			},
 		},
@@ -74,15 +104,15 @@ export const authOptions: NextAuthOptions = {
 				refresh_token: token.refresh_token,
 				user: {
 					...session.user,
-					id: token.id,
+					id: token.id as string,
 					role: token.role,
+					fullname: token.fullname,
+					username: token.username,
 				},
 			};
 		},
 		jwt: async ({ token, user }) => {
 			if (user) {
-				console.log(user);
-
 				return {
 					...token,
 					id: user.id,
@@ -90,6 +120,9 @@ export const authOptions: NextAuthOptions = {
 					refresh_token: user.refresh_token,
 					accessTokenExpires: getTokenExpiration(user.access_token),
 					role: user.role,
+					username: user.username,
+					fullname: user.fullname,
+					picture: user.pictureURL,
 				};
 			}
 

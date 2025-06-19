@@ -31,7 +31,7 @@ const FormField: React.FC<FormFieldProps & PropsWithChildren> = ({
 			layout: { duration: 0.3, ease: "easeInOut" },
 		}}
 	>
-		<div className="flex flex-col">
+		<div className="flex flex-col space-y-0.5">
 			<Label htmlFor={name} className="w-full">
 				{children}
 			</Label>
@@ -43,7 +43,7 @@ const FormField: React.FC<FormFieldProps & PropsWithChildren> = ({
 					className={`transition-all duration-200 w-full ${
 						error
 							? "border-red-500 focus:ring-red-500 focus:border-red-500"
-							: "focus:ring-2 focus:ring-primary focus:border-transparent"
+							: "focus:ring-0"
 					}`}
 				/>
 			</motion.div>

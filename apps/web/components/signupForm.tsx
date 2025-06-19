@@ -5,20 +5,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import FormField from "./formField";
-import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import SubmitButton from "./submitButton";
 import { signIn } from "next-auth/react";
 
 type fields = {
-	name: string;
+	fullname: string;
+	username: string;
 	email: string;
 	password: string;
 };
 
 const SignupForm = () => {
-	const router = useRouter();
 	const mutate = useMutation({
 		mutationFn: signUpReq,
 		onSuccess: (data, variables) => {
@@ -49,7 +47,6 @@ const SignupForm = () => {
 
 	return (
 		<div className="w-full min-w-96">
-			{/* Mensagem de erro global com animação */}
 			<AnimatePresence>
 				{mutate.isError && (
 					<motion.div
@@ -68,14 +65,23 @@ const SignupForm = () => {
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 				<FormField
 					register={register}
-					name="name"
+					name="fullname"
 					type="text"
-					error={errors.name}
+					error={errors.fullname}
 					placeholder="John Doe"
 				>
-					Name
+					Full Name
 				</FormField>
 
+				<FormField
+					register={register}
+					name="username"
+					type="text"
+					error={errors.username}
+					placeholder="John7"
+				>
+					Username
+				</FormField>
 				<FormField
 					error={errors.email}
 					register={register}
