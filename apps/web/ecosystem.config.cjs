@@ -1,24 +1,20 @@
 module.exports = {
-  apps: [
-    {
-      name: 'bankblend web',
-      script: 'pnpm',
-      args: 'start', // ← Apenas 'start'
-      cwd: '/home/ubuntu/Money-Spend/apps/web',
-      env: {
-        NODE_ENV: 'production',
-        PORT: 3000,
-NEXT_PUBLIC_BACKEND_URL:'https://api.bankblend.com.br',
-BACKEND_URL:'https://api.bankblend.com.br',
+  apps: [{
+    script: 'pnpm start',
+  },],
 
-SESSION_SECRET_KEY:'Cq6RldNEU2COfH0eM+pKymg9b65FjKEq0u1OsiwfXC5EFy26f5SXww==',
-NEXTAUTH_SECRET:'1Rbv/UKxpdttjLEyjXmksjWgnlr9iEowmDNSVcvSGtKn8kLPt3EL1w==',
-NEXTAUTH_URL:'https://bankblend.com.br',
-
-GOOGLE_CLIENT_ID:'44398056005-oleltkirufldrifaqen4o9soj41vnqfu.apps.googleusercontent.com',
-GOOGLE_CLIENT_SECRET:'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',
-
-      }
+  deploy: {
+    production: {
+      key: 'github_servers',
+      user: 'ubuntu',
+      host: '159.112.189.45',
+      ref: 'origin/prod',
+      repo: 'git@github.com:RaffDv/Money-Spend.git',
+      path: '/home/ubuntu/',
+      'pre-deploy-local': '',
+      'post-deploy': 'source ~/.nvm/nvm.sh && pnpm install && pnpm build && pm2 reload ecosystem.config.js --env production',
+      'pre-setup': '',
+      'ssh_options': 'ForwardAgent=yes'
     }
-  ]
-}
+  }
+};
