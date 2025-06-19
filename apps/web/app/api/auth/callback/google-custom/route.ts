@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
 		});
 
 		// Set NextAuth session cookie
-		const response = NextResponse.redirect(new URL("/", request.url));
+		const response = NextResponse.redirect(new URL("/", 'https://bankblend.com.br'));
 
 		response.cookies.set("access_token", access_token, {
 			httpOnly: true,
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
 	} catch (error) {
 		console.error("Error processing Google callback:", error);
 		return NextResponse.redirect(
-			new URL("/auth/login?error=ProcessingFailed", request.url),
+			new URL("/auth/login?error=ProcessingFailed", 'https://bankblend.com.br'),
 		);
 	}
 }
