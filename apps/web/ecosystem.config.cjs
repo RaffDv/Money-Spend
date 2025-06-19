@@ -15,7 +15,7 @@ module.exports = {
 			path: "/home/ubuntu/",
 			"pre-deploy-local": "",
 			"post-deploy":
-				"source ~/.nvm/nvm.sh && cd /home/ubuntu/Money-Spend/apps/web && pnpm install && pnpm build && pm2 reload ecosystem.config.js ",
+				"source ~/.nvm/nvm.sh && cd /home/ubuntu/Money-Spend/apps/web && pnpm install && pnpm build && pm2 reload ecosystem.config.cjs ",
 			"pre-setup": "",
 			ssh_options: "ForwardAgent=yes",
 		},
