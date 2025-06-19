@@ -1,11 +1,9 @@
 import axios from "axios";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./auth";
 
 export const BACKEND_URL = process.env.BACKEND_URL;
 
 export const api = axios.create({
-	baseURL: BACKEND_URL || "http://localhost:4000",
+	baseURL: 'https://api.bankblend.com.br',
 	headers: {
 		"Content-Type": "application/json",
 	},
