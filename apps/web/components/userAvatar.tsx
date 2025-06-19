@@ -14,5 +14,4 @@ const UserAvatar = ({ session }:{session:Session}) => (
         </Avatar>
     </>
 );
-
 export default UserAvatar;

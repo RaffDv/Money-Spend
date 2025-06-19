@@ -98,6 +98,8 @@ export const authOptions: NextAuthOptions = {
 	],
 	callbacks: {
 		session: ({ session, token }) => {
+			console.log("token on session callback ", token);
+
 			return {
 				...session,
 				access_token: token.access_token,
@@ -108,6 +110,7 @@ export const authOptions: NextAuthOptions = {
 					role: token.role,
 					fullname: token.fullname,
 					username: token.username,
+					pictureURL: token.picture,
 				},
 			};
 		},
