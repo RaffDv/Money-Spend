@@ -22,8 +22,7 @@ module.exports = {
 				"cd /home/ubuntu/current && " + // Navega para a pasta do código atual
 				"pnpm install && " + // Instala dependências na raiz (importante para monorepos)
 				"pnpm --filter web build && " + // Comando para buildar apenas o app 'web'
-				"cd /home/ubuntu/Money-Spend/apps/web &&" +
-				"pm2 reload ecosystem.config.cjs --only money-spend-web", // Recarrega apenas a aplicação específica
+				"pm2 reload ecosystem.config.mjs --only money-spend-web", // Recarrega apenas a aplicação específica
 			"pre-setup": "",
 			ssh_options: "ForwardAgent=yes",
 		},
