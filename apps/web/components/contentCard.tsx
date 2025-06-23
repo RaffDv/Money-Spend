@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import {
 	Card,
 	CardContent,
@@ -22,11 +22,17 @@ type ContentCardProps = {
 };
 
 export function ContentCard({ children, className }: ContentCardProps) {
-	let title, description, content;
+	let title: ReactElement | null = null;
+	let description: ReactElement | null = null;
+	let content: ReactElement | null = null;
 
 	React.Children.forEach(children, (child) => {
-		if (!React.isValidElement(child)) return;
+		if (!React.isValidElement<{ children: React.ReactElement }>(child)) {
+			return;
+		}
 
+		// Agora, o acesso a 'child.props.children' é 100% seguro e tipado!
+		// Não precisamos mais de nenhum "as" (type assertion).
 		if (child.type === Title) {
 			title = child.props.children;
 		} else if (child.type === Description) {
