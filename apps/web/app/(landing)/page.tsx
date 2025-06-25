@@ -1,6 +1,7 @@
 "use client";
 import AnimatedPath from "@/components/animatedPath";
 import ContentCard from "@/components/contentCard";
+import PulsingLine from "@/components/pulsingLine";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/csr/ArrowUpRight";
 import {
@@ -140,7 +141,14 @@ export default function HomePage() {
 					</ContentCard>
 				</div>
 			</section>
-			<AnimatedPath />
+			<svg viewBox="0 0 500 500">
+				<PulsingLine
+					d="M 5 5 v 100 h 100"
+					pulseLength={20}
+					duration={10}
+					delay={1}
+				/>
+			</svg>
 		</div>
 	);
 }
