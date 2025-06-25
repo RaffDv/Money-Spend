@@ -1,4 +1,5 @@
 "use client";
+import AnimatedPath from "@/components/animatedPath";
 import ContentCard from "@/components/contentCard";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/csr/ArrowUpRight";
@@ -15,14 +16,11 @@ export default function HomePage() {
 	return (
 		<div className="space-y-8 mt-20 w-full">
 			<section className="relative text-center flex flex-col items-center justify-center ">
-				{/* 2. ESTE É O NOSSO ELEMENTO DE BRILHO (GLOW) */}
-				{/* Ele fica posicionado de forma absoluta, centralizado, e com z-index baixo para ficar no fundo. */}
 				<div
 					className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 bg-radial from-indigo-500/30 via-accent/10 to-transparent blur-3xl opacity-60"
 					aria-hidden="true"
 				/>
 
-				{/* 3. Criamos um container para o conteúdo para garantir que ele fique ACIMA do brilho usando z-index */}
 				<div className="relative z-10 flex flex-col items-center justify-center">
 					<h1 className="text-6xl font-bold tracking-tight text-white max-w-4xl">
 						Seu controle financeiro fácil e descomplicado
@@ -34,15 +32,15 @@ export default function HomePage() {
 					<div className="relative group cursor-pointer hover:scale-110 transition-all w-64">
 						<div className="absolute -inset-1 bg-gradient-to-br from-indigo-600/60 via-chart-3/60 to-purple-500/60 cursor-pointer rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
 						<div className="relative h-fit ring-1 ring-gray-900/5 rounded-lg leading-none w-full flex items-top justify-start space-x-6">
-							<Button className="p-4 bg-gradient-to-br from-primary via-chart-3 to-accent w-full cursor-pointer">
-								<a
-									href="/auth/login"
-									className="cursor-pointer flex items-center justify-center text-center space-x-4"
-								>
+							<a
+								href="/auth/login"
+								className="w-full cursor-pointer flex items-center justify-center text-center space-x-4"
+							>
+								<Button className="p-4 bg-gradient-to-br from-primary via-chart-3 to-accent w-full cursor-pointer">
 									<span>Começar Agora </span>
 									<ArrowUpRightIcon size={42} weight="bold" />
-								</a>
-							</Button>
+								</Button>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -142,6 +140,7 @@ export default function HomePage() {
 					</ContentCard>
 				</div>
 			</section>
+			<AnimatedPath />
 		</div>
 	);
 }
