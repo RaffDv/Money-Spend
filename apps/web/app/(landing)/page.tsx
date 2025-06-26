@@ -1,5 +1,4 @@
 "use client";
-import AnimatedPath from "@/components/animatedPath";
 import ContentCard from "@/components/contentCard";
 import PulsingLine from "@/components/pulsingLine";
 import { Button } from "@/components/ui/button";
@@ -11,9 +10,28 @@ import {
 	DevicesIcon,
 	RocketLaunchIcon,
 	LightningIcon,
+	ShieldCheckIcon,
+	BrainIcon,
+	HourglassIcon,
 } from "@phosphor-icons/react/dist/ssr";
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
+	const router = useRouter();
+	const iconAnimationVariants = {
+		initial: {
+			scale: 1,
+		},
+		hover: {
+			scale: 1.2,
+			transition: {
+				type: "spring",
+				stiffness: 300,
+				damping: 15,
+			},
+		},
+	};
 	return (
 		<div className="space-y-8 mt-20 w-full">
 			<section className="relative text-center flex flex-col items-center justify-center ">
@@ -38,7 +56,8 @@ export default function HomePage() {
 								className="w-full cursor-pointer flex items-center justify-center text-center space-x-4"
 							>
 								<Button className="p-4 bg-gradient-to-br from-primary via-chart-3 to-accent w-full cursor-pointer">
-									<span>Começar Agora </span>
+									{" "}
+									<span>Começar Agora </span>{" "}
 									<ArrowUpRightIcon size={42} weight="bold" />
 								</Button>
 							</a>
@@ -47,8 +66,129 @@ export default function HomePage() {
 				</div>
 			</section>
 
+			<section className="relative w-full h-fit p-6 my-4 bg-background/90 backdrop-blur-lg flex items-center justify-center text-center">
+				<div className="border z-10 rounded-lg bg-white/5 border-white/25 backdrop-blur-lg w-11/12 space-x-4 p-6 grid grid-rows-[auto_1fr_auto] space-y-10">
+					<div className="absolute z-20 w-full h-full border-2 border-red-500 ">
+						{/* FIX: SVG viewbox distortion ( test gemini resolution ) */}
+						<svg
+							viewBox="0 0 800 700"
+							height={"100%"}
+							width={"100%"}
+							className="absolute top-0 left-0 w-full h-full z-0 overflow-visible border border-purple-500"
+							preserveAspectRatio="none"
+						>
+							<PulsingLine
+								d="M 5 70 h 100 V 700"
+								pulseLength={50}
+								delay={0.1}
+								duration={5}
+							/>
+							<PulsingLine
+								d="M 5 450 H 600 V 700"
+								pulseLength={50}
+								delay={0.2}
+								duration={8}
+							/>
+						</svg>
+					</div>
+					<div className="flex flex-col items-center justify-center text-center">
+						<h2 className="w-full text-3xl font-bold">
+							Suas finanças finalmente em ordem
+						</h2>
+						<p className="w-3/4">
+							Cansado de planilhas complicadas e de adivinhar para onde seu
+							dinheiro foi? Relaxe, nós entendemos você. Por isso, criamos a
+							BankBlend.
+						</p>
+					</div>
+					<div className="w-full grid grid-cols-1 md:grid-cols-3 gap-5 md:px-10">
+						<motion.div
+							initial="initial"
+							whileHover="hover"
+							className="min-w-full min-h-full"
+						>
+							<ContentCard>
+								<ContentCard.Title>
+									<motion.div variants={iconAnimationVariants}>
+										<ShieldCheckIcon size={36} weight="light" />
+									</motion.div>
+								</ContentCard.Title>
+								<ContentCard.Description>
+									Organização Inteligente
+								</ContentCard.Description>
+								<ContentCard.Content>
+									<span>
+										Com nossa integração segura, viabilizada pela 
+										<strong>Pluggy</strong>, seus gastos são organizados e
+										categorizados automaticamente.
+									</span>
+								</ContentCard.Content>
+							</ContentCard>
+						</motion.div>
+						<motion.div
+							initial="initial"
+							whileHover="hover"
+							className="min-w-full min-h-full"
+						>
+							<ContentCard>
+								<ContentCard.Title>
+									<motion.div variants={iconAnimationVariants}>
+										<BrainIcon size={36} weight="light" />
+									</motion.div>
+								</ContentCard.Title>
+								<ContentCard.Description>
+									Análise com IA
+								</ContentCard.Description>
+								<ContentCard.Content>
+									<span>
+										Nosso agente de IA exclusivo analisa seus dados e te diz o
+										que os números realmente significam.
+									</span>
+								</ContentCard.Content>
+							</ContentCard>
+						</motion.div>
+						<motion.div
+							initial="initial"
+							whileHover="hover"
+							className="min-w-full min-h-full"
+						>
+							<ContentCard>
+								<ContentCard.Title>
+									<motion.div variants={iconAnimationVariants}>
+										<HourglassIcon size={36} color="#ffffff" weight="light" />
+									</motion.div>
+								</ContentCard.Title>
+								<ContentCard.Description>
+									Clareza e Mais Tempo
+								</ContentCard.Description>
+								<ContentCard.Content>
+									<span>
+										Chega de trabalho manual e incertezas. Ganhe clareza,
+										inteligência e tempo para viver seus planos.
+									</span>
+								</ContentCard.Content>
+							</ContentCard>
+						</motion.div>
+					</div>
+					<div className="cursor-default space-y-4">
+						<h3 className="text-2xl">
+							Com a{" "}
+							<strong className=" bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+								BankBlend
+							</strong>
+							, você está no controle
+						</h3>
+						<Button
+							onClick={() => router.push("/auth/register")}
+							className="p-5 w-fit cursor-pointer bg-chart-3/50 font-semibold text-lg hover:scale-105 hover:bg-chart-4/70"
+						>
+							Começar Agora!
+						</Button>{" "}
+					</div>
+				</div>
+			</section>
 			<section className="bg-secondary mt-32 text-center flex flex-col items-center justify-center h-fit p-6">
-				<h2 className="font-bold text-xl m-10">
+				<h2 className="font-bold text-3xl m-10">
 					Tudo que você precisa para controlar suas finanças!
 				</h2>
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-4/5 mt-10">
@@ -141,14 +281,6 @@ export default function HomePage() {
 					</ContentCard>
 				</div>
 			</section>
-			<svg viewBox="0 0 500 500">
-				<PulsingLine
-					d="M 5 5 v 100 h 100"
-					pulseLength={20}
-					duration={10}
-					delay={1}
-				/>
-			</svg>
 		</div>
 	);
 }
