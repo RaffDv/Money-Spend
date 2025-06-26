@@ -15,7 +15,6 @@ const Content = ({ children }: { children: React.ReactNode }) => (
 	<>{children}</>
 );
 
-// --- COMPONENTE PRINCIPAL ATUALIZADO ---
 type ContentCardProps = {
 	children: React.ReactNode;
 	className?: string;
@@ -31,8 +30,6 @@ export function ContentCard({ children, className }: ContentCardProps) {
 			return;
 		}
 
-		// Agora, o acesso a 'child.props.children' é 100% seguro e tipado!
-		// Não precisamos mais de nenhum "as" (type assertion).
 		if (child.type === Title) {
 			title = child.props.children;
 		} else if (child.type === Description) {

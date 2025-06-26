@@ -91,6 +91,19 @@
 	--color-shadow-color: var(--shadow-color);
 	--color-destructive-foreground: var(--destructive-foreground);
 }
+@theme {
+	--animate-slide: slide 3s linear infinite;
+
+	@keyframes slide {
+		0%,
+		100% {
+			transform: translate(0, 0);
+		}
+		50% {
+			transform: translate(0, 3%);
+		}
+	}
+}
 
 :root {
 	--background: oklch(1.0 0 0);

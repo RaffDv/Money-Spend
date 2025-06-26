@@ -33,14 +33,13 @@ export default function HomePage() {
 		},
 	};
 	return (
-		<div className="space-y-8 mt-20 w-full">
-			<section className="relative text-center flex flex-col items-center justify-center ">
-				<div
-					className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 bg-radial from-indigo-500/30 via-accent/10 to-transparent blur-3xl opacity-60"
-					aria-hidden="true"
-				/>
-
-				<div className="relative z-10 flex flex-col items-center justify-center">
+		<div className="space-y-8 mt-20 w-svw md:w-full ">
+			<section className="relative text-center flex flex-col items-center justify-items-center justify-start h-screen">
+				<div className="relative z-10 flex flex-col items-center justify-center animate-slide">
+					<div
+						className="absolute w-2/3 h-2/3 bg-radial from-indigo-500/30 via-accent/10 to-transparent blur-3xl opacity-60"
+						aria-hidden="true"
+					/>
 					<h1 className="text-6xl font-bold tracking-tight text-white max-w-4xl">
 						Seu controle financeiro fácil e descomplicado
 					</h1>
@@ -66,32 +65,9 @@ export default function HomePage() {
 				</div>
 			</section>
 
-			<section className="relative w-full h-fit p-6 my-4 bg-background/90 backdrop-blur-lg flex items-center justify-center text-center">
+			<section className="relative w-full h-fit p-6 my-4 bg-background/90 ackdrop-blur-lg flex items-center justify-center text-center">
 				<div className="border z-10 rounded-lg bg-white/5 border-white/25 backdrop-blur-lg w-11/12 space-x-4 p-6 grid grid-rows-[auto_1fr_auto] space-y-10">
-					<div className="absolute z-20 w-full h-full border-2 border-red-500 ">
-						{/* FIX: SVG viewbox distortion ( test gemini resolution ) */}
-						<svg
-							viewBox="0 0 800 700"
-							height={"100%"}
-							width={"100%"}
-							className="absolute top-0 left-0 w-full h-full z-0 overflow-visible border border-purple-500"
-							preserveAspectRatio="none"
-						>
-							<PulsingLine
-								d="M 5 70 h 100 V 700"
-								pulseLength={50}
-								delay={0.1}
-								duration={5}
-							/>
-							<PulsingLine
-								d="M 5 450 H 600 V 700"
-								pulseLength={50}
-								delay={0.2}
-								duration={8}
-							/>
-						</svg>
-					</div>
-					<div className="flex flex-col items-center justify-center text-center">
+					<div className=" flex flex-col items-center justify-center text-center z-20">
 						<h2 className="w-full text-3xl font-bold">
 							Suas finanças finalmente em ordem
 						</h2>
@@ -180,7 +156,7 @@ export default function HomePage() {
 						</h3>
 						<Button
 							onClick={() => router.push("/auth/register")}
-							className="p-5 w-fit cursor-pointer bg-chart-3/50 font-semibold text-lg hover:scale-105 hover:bg-chart-4/70"
+							className="p-5 w-fit cursor-pointer bg-indigo-500 font-semibold text-lg hover:scale-105 hover:bg-indigo-600"
 						>
 							Começar Agora!
 						</Button>{" "}
