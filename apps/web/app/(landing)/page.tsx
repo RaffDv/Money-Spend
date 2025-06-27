@@ -13,6 +13,9 @@ import {
 	ShieldCheckIcon,
 	BrainIcon,
 	HourglassIcon,
+	FingerprintIcon,
+	SecurityCameraIcon,
+	SealCheckIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -255,6 +258,79 @@ export default function HomePage() {
 							</span>
 						</ContentCard.Content>
 					</ContentCard>
+				</div>
+			</section>
+			<section className="bg-background/20 bg-opacity-80 w-full h-fit p-6 grid grid-[auto_1fr_auto] space-y-10 my-20">
+				<div className="flex flex-col items-center justify-center h-fit space-y-3">
+					<h2 className="text-5xl font-bold w-2/3 text-center h-fit p-3">
+						Seus dados estão{" "}
+						<p className="bg-indigo-500 text-transparent bg-clip-text p-2">
+							100% seguros
+						</p>
+					</h2>
+					<p className="  text-muted-foreground">
+						Utilizamos os mesmos protocolos de segurança dos maiores bancos do
+						mundo
+					</p>
+				</div>
+				<div className="grid grid-cols-3 text-center gap-8 mx-32">
+					<ContentCard>
+						<ContentCard.Title>
+							<FingerprintIcon size={36} color="#fffafa" weight="light" />
+						</ContentCard.Title>
+						<ContentCard.Description>
+							Criptografia de Ponta
+						</ContentCard.Description>
+						<ContentCard.Content>
+							<span className="text-muted-foreground">
+								Todos os dados são criptografados com AES-256, o mesmo padrão
+								usado por bancos e governos.
+							</span>
+						</ContentCard.Content>
+					</ContentCard>
+					<ContentCard>
+						<ContentCard.Title>
+							<SecurityCameraIcon size={36} color="#fffafa" weight="light" />
+						</ContentCard.Title>
+						<ContentCard.Description>
+							Acesso Somente Leitura
+						</ContentCard.Description>
+						<ContentCard.Content>
+							<span className="text-muted-foreground">
+								Nunca conseguimos mover ou alterar seu dinheiro. Apenas
+								visualizamos suas transações.
+							</span>
+						</ContentCard.Content>
+					</ContentCard>
+					<ContentCard>
+						<ContentCard.Title>
+							<SealCheckIcon size={36} color="#fffafa" weight="light" />
+						</ContentCard.Title>
+						<ContentCard.Description>
+							Segurança Nível Bancário
+						</ContentCard.Description>
+						<ContentCard.Content>
+							<span className="text-muted-foreground">
+								Em parceria com líderes de mercado em Open Finance, nossa
+								plataforma atende às mais rigorosas certificações de segurança,
+								as mesmas exigidas pelos grandes bancos.
+							</span>
+						</ContentCard.Content>
+					</ContentCard>
+				</div>
+				<div className="w-full flex items-center justify-center">
+					<div className="flex w-2/3 flex-col items-center justify-center text-center mt-20 border border-border rounded bg-card/20 backdrop-blur-xs p-10 space-y-5">
+						<h3 className="font-semibold text-3xl">
+							Pronto para transformar sua vida financeira?
+						</h3>
+						<p className="text-muted-foreground">
+							Junte-se a milhares de pessoas que já controlam suas finanças sem
+							esforço
+						</p>
+						<Button className="bg-indigo-500 mt-12 w-1/3 py-6 text-lg hover:scale-105 cursor-pointer hover:bg-indigo-600">
+							Começar gratuitamente
+						</Button>
+					</div>
 				</div>
 			</section>
 		</div>

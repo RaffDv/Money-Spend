@@ -18,8 +18,8 @@ export default async function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
-			<body className={`${inter.className} antialiased dark`}>
+		<html lang="en" className="scroll-smooth">
+			<body className={`${inter.className} antialiased dark `}>
 				<Provider>{children}</Provider>
 			</body>
 		</html>
