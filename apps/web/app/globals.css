@@ -2,7 +2,31 @@
 @plugin 'tailwindcss-animate';
 
 @custom-variant dark (&:is(.dark *));
+/* Padrão de fundo com linhas TRACEJADAS verticais usando uma variável CSS */
+/* Padrão de fundo com 5 linhas DUPLAS e tracejadas, estilo "stitch"
+*/
+.dashed-vertical-lines {
+	/* O "ponto" de cada linha será um traço de 2px com um espaço de 2px.
+    Isso resulta em um padrão de 4px de altura.
+  */
+	--line-pattern: linear-gradient(to bottom, var(--muted) 8px, transparent 2px);
+	--line-size: 1.3px 16px; /* Espessura de 1px, ciclo de 4px de altura */
 
+	background-image: var(--line-pattern), var(--line-pattern), /* Par 1 */
+		var(--line-pattern), var(--line-pattern), /* Par 2 */ var(--line-pattern),
+		var(--line-pattern), /* Par 3 (Central) */ var(--line-pattern),
+		var(--line-pattern), /* Par 4 */ var(--line-pattern), var(--line-pattern); /* Par 5 */
+
+	background-size: var(--line-size), var(--line-size), var(--line-size),
+		var(--line-size), var(--line-size), var(--line-size), var(--line-size),
+		var(--line-size), var(--line-size), var(--line-size);
+
+	background-repeat: repeat-y;
+
+	background-position: calc(10% - 2px) 0, calc(10% + 2px) 0, calc(30% - 2px) 0,
+		calc(30% + 2px) 0, calc(50% - 2px) 0, calc(50% + 2px) 0, calc(70% - 2px) 0,
+		calc(70% + 2px) 0, calc(90% - 2px) 0, calc(90% + 2px) 0;
+}
 @theme inline {
 	--radius-sm: calc(var(--radius) - 4px);
 	--radius-md: calc(var(--radius) - 2px);
@@ -66,6 +90,19 @@
 	--shadow-opacity: var(--shadow-opacity);
 	--color-shadow-color: var(--shadow-color);
 	--color-destructive-foreground: var(--destructive-foreground);
+}
+@theme {
+	--animate-slide: slide 3s linear infinite;
+
+	@keyframes slide {
+		0%,
+		100% {
+			transform: translate(0, 0);
+		}
+		50% {
+			transform: translate(0, 3%);
+		}
+	}
 }
 
 :root {
@@ -253,3 +290,4 @@ body {
 	padding: 0;
 }
 
+/* Padrão de fundo com linhas TRACEJADAS verticais */

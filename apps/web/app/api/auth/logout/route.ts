@@ -19,5 +19,5 @@ export async function GET(request: NextRequest) {
 		path: "/",
 		expires: new Date(0),
 	});
-	return NextResponse.redirect(new URL("/auth/login", request.nextUrl));
+	return NextResponse.redirect(new URL("/auth/login", 'https://bankblend.com.br'));
 }

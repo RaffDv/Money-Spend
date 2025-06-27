@@ -2,7 +2,8 @@ module.exports = {
 	apps: [
 		{
 			name: "bankblend API",
-			script: "dist/main.js",
+			script: "pnpm",
+      args:"start:prod",
 			cwd: "/home/ubuntu/Money-Spend/apps/api",
 			instances: "max",
 			exec_mode: "cluster",
