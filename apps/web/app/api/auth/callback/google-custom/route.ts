@@ -1,18 +1,18 @@
-import { type NextRequest, NextResponse } from "next/server";
-import { encode } from "next-auth/jwt";
-import { getTokenExpiration } from "@/lib/utils";
+import { type NextRequest, NextResponse } from 'next/server';
+import { encode } from 'next-auth/jwt';
+import { getTokenExpiration } from '@/lib/utils';
 
 export async function GET(request: NextRequest) {
 	const { searchParams } = new URL(request.url);
 
-	const access_token = searchParams.get("access_token");
-	const refresh_token = searchParams.get("refresh_token");
-	const userString = searchParams.get("user");
+	const access_token = searchParams.get('access_token');
+	const refresh_token = searchParams.get('refresh_token');
+	const userString = searchParams.get('user');
 
 	if (!access_token || !refresh_token || !userString) {
-		console.log("Missing required parameters for Google OAuth callback");
+		console.log('Missing required parameters for Google OAuth callback');
 		return NextResponse.redirect(
-			new URL("/auth/login?error=MissingParams", request.url),
+			new URL('/auth/login?error=MissingParams', request.url),
 		);
 	}
 
@@ -36,39 +36,41 @@ export async function GET(request: NextRequest) {
 		});
 
 		// Set NextAuth session cookie
-		const response = NextResponse.redirect(new URL("/", 'https://bankblend.com.br'));
+		const response = NextResponse.redirect(
+			new URL('/', 'https://bankblend.com.br'),
+		);
 
-		response.cookies.set("access_token", access_token, {
+		response.cookies.set('access_token', access_token, {
 			httpOnly: true,
 			secure: true,
-			path: "/",
+			path: '/',
 			domain: process.env.HOST,
 		});
-		response.cookies.set("refresh_token", refresh_token, {
+		response.cookies.set('refresh_token', refresh_token, {
 			httpOnly: true,
 			secure: true,
-			path: "/",
+			path: '/',
 			domain: process.env.HOST,
 		});
 		response.cookies.set(
-			process.env.NODE_ENV === "production"
-				? "__Secure-next-auth.session-token"
-				: "next-auth.session-token",
+			process.env.NODE_ENV === 'production'
+				? '__Secure-next-auth.session-token'
+				: 'next-auth.session-token',
 			token,
 			{
 				httpOnly: true,
-				secure: process.env.NODE_ENV === "production",
-				sameSite: "lax",
+				secure: process.env.NODE_ENV === 'production',
+				sameSite: 'lax',
 				maxAge: 2 * 60 * 60, // 2h
-				path: "/",
+				path: '/',
 			},
 		);
 
 		return response;
 	} catch (error) {
-		console.error("Error processing Google callback:", error);
+		console.error('Error processing Google callback:', error);
 		return NextResponse.redirect(
-			new URL("/auth/login?error=ProcessingFailed", 'https://bankblend.com.br'),
+			new URL('/auth/login?error=ProcessingFailed', 'https://bankblend.com.br'),
 		);
 	}
 }

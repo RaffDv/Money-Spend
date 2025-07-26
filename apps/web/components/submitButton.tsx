@@ -1,6 +1,6 @@
-import type { UseMutationResult } from "@tanstack/react-query";
-import { Button } from "./ui/button";
-import type { PropsWithChildren, ReactNode } from "react";
+import type { UseMutationResult } from '@tanstack/react-query';
+import { Button } from './ui/button';
+import type { PropsWithChildren, ReactNode } from 'react';
 
 type props = {
 	mutation: UseMutationResult<any, any, any, unknown>;

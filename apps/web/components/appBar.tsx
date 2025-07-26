@@ -1,5 +1,5 @@
-import Image from "next/image";
-import { Button } from "./ui/button";
+import Image from 'next/image';
+import { Button } from './ui/button';
 const AppBar = () => {
 	return (
 		<nav className="max-h-28 w-svw md:w-full flex border-b border-b-white/10 p-4 items-center justify-center bg-background/20 bg-opacity-80 backdrop-blur-md">
@@ -7,15 +7,15 @@ const AppBar = () => {
 				<a href="/" className="flex justify-start space-x-5 items-center">
 					<Image
 						alt="BankBlend logo"
-						src={"/logo.svg"}
-						width={36}
-						height={36}
+						src={'/logo.svg'}
+						width={24}
+						height={41}
 					/>
 					<span className="font-bold text-2xl">BankBlend</span>
 				</a>
 
 				<ul className="flex justify-center gap-x-6">
-					{" "}
+					{' '}
 					<li className="text-foreground hover:underline hover:text-white/80 transition-colors cursor-pointer">
 						Produto
 					</li>
@@ -29,7 +29,7 @@ const AppBar = () => {
 
 				<div className="flex justify-end">
 					<a href="/auth/login">
-						<Button variant={"outline"} className="cursor-pointer">
+						<Button variant={'outline'} className="cursor-pointer">
 							<span>Login</span>
 						</Button>
 					</a>

@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { SignInFormSchema } from "@/lib/types";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { AnimatePresence, motion } from "framer-motion";
-import { getSession, signIn } from "next-auth/react";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { type SubmitHandler, useForm } from "react-hook-form";
-import type { z } from "zod";
-import FormField from "./formField";
-import SubmitButton from "./submitButton";
-import { loginReq } from "@/lib/api";
+import { SignInFormSchema } from '@/lib/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { AnimatePresence, motion } from 'framer-motion';
+import { getSession, signIn } from 'next-auth/react';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { type SubmitHandler, useForm } from 'react-hook-form';
+import type { z } from 'zod';
+import FormField from './formField';
+import SubmitButton from './submitButton';
+import { loginReq } from '@/lib/api';
 
 type fields = {
 	email: string;
@@ -19,7 +19,7 @@ type fields = {
 };
 const SignInForm = () => {
 	const searchParams = useSearchParams();
-	const callbackUrl = searchParams.get("callbackUrl") || "/";
+	const callbackUrl = searchParams.get('callbackUrl') || '/';
 	const {
 		register,
 		handleSubmit,
@@ -33,7 +33,7 @@ const SignInForm = () => {
 	const mutation = useMutation({
 		mutationFn: async (data: signInType) => {
 			// const backendResult = await loginReq(data);
-			const result = await signIn("credentials", {
+			const result = await signIn('credentials', {
 				email: data.email,
 				password: data.password,
 				redirect: false,
@@ -65,7 +65,7 @@ const SignInForm = () => {
 				{mutation.isError && (
 					<motion.div
 						initial={{ height: 0, opacity: 0 }}
-						animate={{ height: "auto", opacity: 1 }}
+						animate={{ height: 'auto', opacity: 1 }}
 						exit={{ height: 0, opacity: 0 }}
 						className=" w-full flex items-center justify-center "
 					>
@@ -105,7 +105,7 @@ const SignInForm = () => {
 				<SubmitButton isSubmitting={isSubmitting} mutation={mutation}>
 					<span>Login</span>
 				</SubmitButton>
-			</form>{" "}
+			</form>{' '}
 		</div>
 	);
 };

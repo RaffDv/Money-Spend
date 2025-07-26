@@ -1,6 +1,6 @@
-"use client";
-import { motion } from "framer-motion";
-import { useState, useRef, useLayoutEffect } from "react";
+'use client';
+import { motion } from 'framer-motion';
+import { useState, useRef, useLayoutEffect } from 'react';
 
 interface PulsingLineProps {
 	d: string;
@@ -52,8 +52,8 @@ const PulsingLine: React.FC<PulsingLineProps> = ({
 					transition={{
 						duration: duration,
 						repeat: Infinity,
-						repeatType: "loop",
-						ease: "linear",
+						repeatType: 'loop',
+						ease: 'linear',
 						delay: delay,
 					}}
 				/>

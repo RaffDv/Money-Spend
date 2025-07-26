@@ -1,15 +1,15 @@
-"use client";
-import Link from "next/link";
-import SignUpForm from "@/components/signupForm";
+'use client';
+import Link from 'next/link';
+import SignUpForm from '@/components/signupForm';
 import {
 	Card,
 	CardContent,
 	CardFooter,
 	CardHeader,
 	CardTitle,
-} from "@/components/ui/card";
-import GoogleLoginButton from "@/components/googleButton";
-import { Separator } from "@/components/ui/separator";
+} from '@/components/ui/card';
+import GoogleLoginButton from '@/components/googleButton';
+import { Separator } from '@/components/ui/separator';
 
 const Page = () => {
 	return (
@@ -30,7 +30,7 @@ const Page = () => {
 				<CardFooter>
 					<div className="flex justify-between text-sm space-x-0.5">
 						<p>Already have an account? </p>
-						<Link href={"/auth/login"}>
+						<Link href={'/auth/login'}>
 							<span className="underline"> Sign In</span>
 						</Link>
 					</div>

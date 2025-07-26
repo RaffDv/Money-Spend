@@ -1,6 +1,6 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import GoogleIcon from "./icons/googleIcon";
+'use client';
+import { Button } from '@/components/ui/button';
+import GoogleIcon from './icons/googleIcon';
 
 const GoogleLoginButton = () => {
 	const handleGoogleSignIn = () => {

@@ -1,7 +1,7 @@
-import { HttpStatus, Injectable } from "@nestjs/common";
-import type { CreateUserDto } from "./dto/create-user.dto";
-import { hash } from "argon2";
-import { PrismaService } from "../prisma/prisma.service";
+import { HttpStatus, Injectable } from '@nestjs/common';
+import type { CreateUserDto } from './dto/create-user.dto';
+import { hash } from 'argon2';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UserService {

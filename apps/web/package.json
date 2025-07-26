@@ -38,7 +38,6 @@
 		"tailwindcss-animate": "^1.0.7"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.9.4",
 		"@repo/typescript-config": "workspace:*",
 		"@types/next-auth": "^3.15.0",
 		"@types/node": "^22.15.3",

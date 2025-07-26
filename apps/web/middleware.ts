@@ -1,10 +1,10 @@
 // middleware.ts
-import { withAuth } from "next-auth/middleware";
-import { NextResponse } from "next/server";
+import { withAuth } from 'next-auth/middleware';
+import { NextResponse } from 'next/server';
 
 // Defina suas rotas e roles necessários
 const PROTECTED_ROUTES = {
-	"/dashboard": ["user", "admin"],
+	'/dashboard': ['user', 'admin'],
 } as const;
 
 export default withAuth(
@@ -12,7 +12,9 @@ export default withAuth(
 		const token = req.nextauth.token;
 
 		if (!token) {
-			return NextResponse.redirect(new URL("/auth/login", 'https://bankblend.com.br'));
+			return NextResponse.redirect(
+				new URL('/auth/login', 'https://bankblend.com.br'),
+			);
 		}
 		return NextResponse.next();
 	},
@@ -36,5 +38,5 @@ export default withAuth(
 );
 
 export const config = {
-	matcher: ["/dashboard/:path*", "/api/:path*"],
+	matcher: ['/dashboard/:path*', '/api/:path*'],
 };

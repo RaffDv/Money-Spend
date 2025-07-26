@@ -1,8 +1,8 @@
-"use client";
-import ContentCard from "@/components/contentCard";
-import PulsingLine from "@/components/pulsingLine";
-import { Button } from "@/components/ui/button";
-import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/csr/ArrowUpRight";
+'use client';
+import ContentCard from '@/components/contentCard';
+import PulsingLine from '@/components/pulsingLine';
+import { Button } from '@/components/ui/button';
+import { ArrowUpRightIcon } from '@phosphor-icons/react/dist/csr/ArrowUpRight';
 import {
 	PlugsConnectedIcon,
 	ShieldIcon,
@@ -16,9 +16,9 @@ import {
 	FingerprintIcon,
 	SecurityCameraIcon,
 	SealCheckIcon,
-} from "@phosphor-icons/react/dist/ssr";
-import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+} from '@phosphor-icons/react/dist/ssr';
+import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 export default function HomePage() {
 	const router = useRouter();
@@ -29,7 +29,7 @@ export default function HomePage() {
 		hover: {
 			scale: 1.2,
 			transition: {
-				type: "spring",
+				type: 'spring',
 				stiffness: 300,
 				damping: 15,
 			},
@@ -58,8 +58,8 @@ export default function HomePage() {
 								className="w-full cursor-pointer flex items-center justify-center text-center space-x-4"
 							>
 								<Button className="p-4 bg-gradient-to-br from-primary via-chart-3 to-accent w-full cursor-pointer">
-									{" "}
-									<span>Começar Agora </span>{" "}
+									{' '}
+									<span>Começar Agora </span>{' '}
 									<ArrowUpRightIcon size={42} weight="bold" />
 								</Button>
 							</a>
@@ -151,18 +151,18 @@ export default function HomePage() {
 					</div>
 					<div className="cursor-default space-y-4">
 						<h3 className="text-2xl">
-							Com a{" "}
+							Com a{' '}
 							<strong className=" bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
 								BankBlend
 							</strong>
 							, você está no controle
 						</h3>
 						<Button
-							onClick={() => router.push("/auth/register")}
+							onClick={() => router.push('/auth/register')}
 							className="p-5 w-fit cursor-pointer bg-indigo-500 font-semibold text-lg hover:scale-105 hover:bg-indigo-600"
 						>
 							Começar Agora!
-						</Button>{" "}
+						</Button>{' '}
 					</div>
 				</div>
 			</section>
@@ -263,7 +263,7 @@ export default function HomePage() {
 			<section className="bg-background/20 bg-opacity-80 w-full h-fit p-6 grid grid-[auto_1fr_auto] space-y-10 my-20">
 				<div className="flex flex-col items-center justify-center h-fit space-y-3">
 					<h2 className="text-5xl font-bold w-2/3 text-center h-fit p-3">
-						Seus dados estão{" "}
+						Seus dados estão{' '}
 						<p className="bg-indigo-500 text-transparent bg-clip-text p-2">
 							100% seguros
 						</p>

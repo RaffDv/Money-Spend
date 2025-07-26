@@ -1,30 +1,30 @@
-import type { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { loginReq } from "./api";
+import type { NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { loginReq } from './api';
 import {
 	getTokenExpiration,
 	isTokenExpired,
 	refreshAccessToken,
-} from "./utils";
-import { cookies } from "next/headers";
+} from './utils';
+import { cookies } from 'next/headers';
 
 export const authOptions: NextAuthOptions = {
 	session: {
-		strategy: "jwt",
+		strategy: 'jwt',
 		maxAge: 2 * 60 * 60, //2 hrs
 	},
 	pages: {
-		signIn: "/auth/login",
+		signIn: '/auth/login',
 	},
 	providers: [
 		CredentialsProvider({
-			name: "Sign in",
+			name: 'Sign in',
 			credentials: {
 				email: {
-					label: "Email",
-					type: "email",
+					label: 'Email',
+					type: 'email',
 				},
-				password: { label: "Password", type: "password" },
+				password: { label: 'Password', type: 'password' },
 			},
 			async authorize(credentials) {
 				const response = await loginReq({
@@ -32,22 +32,22 @@ export const authOptions: NextAuthOptions = {
 					password: credentials?.password as string,
 				});
 
-				const setCookieHeader = response.headers["set-cookie"];
+				const setCookieHeader = response.headers['set-cookie'];
 
 				const tokens: Record<string, string> = {};
 
 				if (setCookieHeader) {
 					// biome-ignore lint/complexity/noForEach: <explanation>
 					setCookieHeader.forEach((cookie: string) => {
-						const [cookieData] = cookie.split(";");
+						const [cookieData] = cookie.split(';');
 
 						if (!cookieData) return null;
-						const [name, value] = cookieData.split("=");
+						const [name, value] = cookieData.split('=');
 
 						// Assumindo que seus tokens têm nomes específicos
 						if (
-							name?.includes("access_token") ||
-							name?.includes("refresh_token")
+							name?.includes('access_token') ||
+							name?.includes('refresh_token')
 						) {
 							if (!value) return null;
 							tokens[name.trim()] = value.trim();
@@ -60,25 +60,25 @@ export const authOptions: NextAuthOptions = {
 					cookiesStorage.set(name, value, {
 						httpOnly: true,
 						secure: true,
-						path: "/",
+						path: '/',
 						domain: process.env.HOST,
 					});
 				});
-				if (response.data?.error) throw new Error("auth.ts | error on request");
+				if (response.data?.error) throw new Error('auth.ts | error on request');
 				return await {
 					...response.data,
 				};
 			},
 		}),
 		{
-			id: "Google-custom",
-			name: "Google",
-			type: "oauth",
+			id: 'Google-custom',
+			name: 'Google',
+			type: 'oauth',
 			authorization: {
 				url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/Google/login`,
 				params: {
-					scope: "email profile",
-					response_type: "code",
+					scope: 'email profile',
+					response_type: 'code',
 				},
 			},
 			clientId: process.env.Google_CLIENT_ID,
@@ -98,7 +98,7 @@ export const authOptions: NextAuthOptions = {
 	],
 	callbacks: {
 		session: ({ session, token }) => {
-			console.log("token on session callback ", token);
+			console.log('token on session callback ', token);
 
 			return {
 				...session,
@@ -139,7 +139,7 @@ export const authOptions: NextAuthOptions = {
 
 		async signIn({ user, account, profile }) {
 			// para validações ( opcional )
-			if (account?.provider === "Google-custom") {
+			if (account?.provider === 'Google-custom') {
 				return true;
 			}
 			return true;

@@ -1,6 +1,6 @@
 // lib/hooks/use-auth.ts
-import { useSession, signOut } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { useSession, signOut } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
 export function useAuth() {
 	const { data: session, status } = useSession();
@@ -8,15 +8,15 @@ export function useAuth() {
 	const logout = async () => {
 		await signOut({
 			redirect: false,
-			callbackUrl: "/auth/login",
+			callbackUrl: '/auth/login',
 		});
-		redirect("/auth/login");
+		redirect('/auth/login');
 	};
 
 	return {
 		user: session?.user,
 		isAuthenticated: !!session,
-		isLoading: status === "loading",
+		isLoading: status === 'loading',
 		logout,
 	};
 }

@@ -1,11 +1,11 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const BACKEND_URL = process.env.BACKEND_URL;
 
 export const api = axios.create({
 	baseURL: 'https://api.bankblend.com.br',
 	headers: {
-		"Content-Type": "application/json",
+		'Content-Type': 'application/json',
 	},
 	withCredentials: true,
 });
@@ -16,7 +16,7 @@ api.interceptors.response.use(
 	(error) => {
 		if (error.response?.data?.message) {
 			const customError = new Error(error.response.data.message);
-			customError.name = "BackendError";
+			customError.name = 'BackendError';
 			return Promise.reject(customError);
 		}
 		return Promise.reject(error);

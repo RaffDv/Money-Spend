@@ -1,13 +1,13 @@
-"use client";
-import { signUpReq } from "@/lib/api";
-import { SignUpFormSchema } from "@/lib/types";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { type SubmitHandler, useForm } from "react-hook-form";
-import FormField from "./formField";
-import { AnimatePresence, motion } from "framer-motion";
-import SubmitButton from "./submitButton";
-import { signIn } from "next-auth/react";
+'use client';
+import { signUpReq } from '@/lib/api';
+import { SignUpFormSchema } from '@/lib/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { type SubmitHandler, useForm } from 'react-hook-form';
+import FormField from './formField';
+import { AnimatePresence, motion } from 'framer-motion';
+import SubmitButton from './submitButton';
+import { signIn } from 'next-auth/react';
 
 type fields = {
 	fullname: string;
@@ -20,8 +20,8 @@ const SignupForm = () => {
 	const mutate = useMutation({
 		mutationFn: signUpReq,
 		onSuccess: (data, variables) => {
-			signIn("credentials", {
-				callbackUrl: "/",
+			signIn('credentials', {
+				callbackUrl: '/',
 				redirect: true,
 				email: variables.email,
 				password: variables.password,
@@ -51,7 +51,7 @@ const SignupForm = () => {
 				{mutate.isError && (
 					<motion.div
 						initial={{ height: 0, opacity: 0 }}
-						animate={{ height: "auto", opacity: 1 }}
+						animate={{ height: 'auto', opacity: 1 }}
 						exit={{ height: 0, opacity: 0 }}
 						className="w-full flex justify-center"
 					>
