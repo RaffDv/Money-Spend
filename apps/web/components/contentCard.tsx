@@ -1,11 +1,11 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement } from "react";
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from './ui/card';
+} from "./ui/card";
 // Os sub-componentes continuam iguais, servindo como "marcadores"
 const Title = ({ children }: { children: React.ReactNode }) => <>{children}</>;
 const Description = ({ children }: { children: React.ReactNode }) => (

@@ -1,4 +1,4 @@
-export default function GoogleIcon({ className = 'w-5 h-5', ...props }) {
+export default function GoogleIcon({ className = "w-5 h-5", ...props }) {
 	return (
 		// biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
 		<svg

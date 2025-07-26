@@ -1,5 +1,5 @@
-import type { Session } from 'next-auth';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import type { Session } from "next-auth";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const UserAvatar = ({ session }: { session: Session }) => (
 	<>

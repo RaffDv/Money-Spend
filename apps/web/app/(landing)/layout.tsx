@@ -1,6 +1,6 @@
-import AppBar from '@/components/appBar';
-import Footer from '@/components/footer';
-import type { PropsWithChildren } from 'react';
+import AppBar from "@/components/appBar";
+import Footer from "@/components/footer";
+import type { PropsWithChildren } from "react";
 
 const layout = ({ children }: PropsWithChildren) => {
 	return (

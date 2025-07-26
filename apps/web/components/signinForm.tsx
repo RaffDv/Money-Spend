@@ -1,25 +1,22 @@
-'use client';
+"use client";
 
-import { SignInFormSchema } from '@/lib/types';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
-import { AnimatePresence, motion } from 'framer-motion';
-import { getSession, signIn } from 'next-auth/react';
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { type SubmitHandler, useForm } from 'react-hook-form';
-import type { z } from 'zod';
-import FormField from './formField';
-import SubmitButton from './submitButton';
-import { loginReq } from '@/lib/api';
+import { SignInFormSchema } from "@/lib/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import FormField from "./formField";
+import SubmitButton from "./submitButton";
+import { useState } from "react";
+import { supabase } from "@/lib/supabase/client";
 
 type fields = {
 	email: string;
 	password: string;
 };
 const SignInForm = () => {
-	const searchParams = useSearchParams();
-	const callbackUrl = searchParams.get('callbackUrl') || '/';
+	const [formError, setFormError] = useState<string | null>(null);
 	const {
 		register,
 		handleSubmit,
@@ -28,49 +25,34 @@ const SignInForm = () => {
 		resolver: zodResolver(SignInFormSchema),
 	});
 
-	type signInType = z.infer<typeof SignInFormSchema>;
 	const router = useRouter();
-	const mutation = useMutation({
-		mutationFn: async (data: signInType) => {
-			// const backendResult = await loginReq(data);
-			const result = await signIn('credentials', {
-				email: data.email,
-				password: data.password,
-				redirect: false,
-			});
-
-			if (result?.error) {
-				throw new Error(result.error);
-			}
-
-			return result;
-		},
-		onSuccess: async () => {
-			// Aguarda a sessão ser atualizada
-			await getSession();
-			router.push(callbackUrl);
-			router.refresh();
-		},
-	});
 	const onSubmit: SubmitHandler<fields> = async (data) => {
 		const validatedInputs = SignInFormSchema.safeParse(data);
 		if (validatedInputs.success) {
-			await mutation.mutateAsync(data);
+			const { error } = await supabase.auth.signInWithPassword({
+				email: validatedInputs.data.email,
+				password: validatedInputs.data.password,
+			});
+			if (error) {
+				setFormError(error.message);
+				return;
+			}
+			router.push("/");
 		}
 	};
 
 	return (
 		<div className="w-full min-w-96">
 			<AnimatePresence>
-				{mutation.isError && (
+				{formError && (
 					<motion.div
 						initial={{ height: 0, opacity: 0 }}
-						animate={{ height: 'auto', opacity: 1 }}
+						animate={{ height: "auto", opacity: 1 }}
 						exit={{ height: 0, opacity: 0 }}
 						className=" w-full flex items-center justify-center "
 					>
 						<span className="shadow-lg border border-red-600 rounded text-sm text-red-500 p-2 my-2 bg-red-200 m-4">
-							{mutation.error.message}
+							{formError}
 						</span>
 					</motion.div>
 				)}
@@ -102,10 +84,10 @@ const SignInForm = () => {
 						Forgot password
 					</Link>
 				</div>
-				<SubmitButton isSubmitting={isSubmitting} mutation={mutation}>
+				<SubmitButton isSubmitting={isSubmitting}>
 					<span>Login</span>
 				</SubmitButton>
-			</form>{' '}
+			</form>{" "}
 		</div>
 	);
 };

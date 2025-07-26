@@ -1,9 +1,9 @@
 // formField.tsx - Versão com Framer Motion
-import type { PropsWithChildren } from 'react';
-import type { FieldError, UseFormRegister } from 'react-hook-form';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Label } from './ui/label';
-import { Input } from './ui/input';
+import type { PropsWithChildren } from "react";
+import type { FieldError, UseFormRegister } from "react-hook-form";
+import { motion, AnimatePresence } from "framer-motion";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
 
 export type FormFieldProps = {
 	type: string;
@@ -28,7 +28,7 @@ const FormField: React.FC<FormFieldProps & PropsWithChildren> = ({
 		layout="size"
 		className="flex flex-col space-y-1"
 		transition={{
-			layout: { duration: 0.3, ease: 'easeInOut' },
+			layout: { duration: 0.3, ease: "easeInOut" },
 		}}
 	>
 		<div className="flex flex-col space-y-0.5">
@@ -42,8 +42,8 @@ const FormField: React.FC<FormFieldProps & PropsWithChildren> = ({
 					{...register(name, { valueAsNumber })}
 					className={`transition-all duration-200 w-full ${
 						error
-							? 'border-red-500 focus:ring-red-500 focus:border-red-500'
-							: 'focus:ring-0'
+							? "border-red-500 focus:ring-red-500 focus:border-red-500"
+							: "focus:ring-0"
 					}`}
 				/>
 			</motion.div>
@@ -60,13 +60,13 @@ const FormField: React.FC<FormFieldProps & PropsWithChildren> = ({
 					}}
 					animate={{
 						opacity: 1,
-						height: 'auto',
+						height: "auto",
 						y: 0,
 						scale: 1,
 						transition: {
-							height: { duration: 0.3, ease: 'easeOut' },
+							height: { duration: 0.3, ease: "easeOut" },
 							opacity: { duration: 0.2, delay: 0.1 },
-							y: { duration: 0.3, ease: 'easeOut' },
+							y: { duration: 0.3, ease: "easeOut" },
 							scale: { duration: 0.2, delay: 0.15 },
 						},
 					}}
@@ -77,13 +77,13 @@ const FormField: React.FC<FormFieldProps & PropsWithChildren> = ({
 						scale: 0.95,
 						transition: {
 							opacity: { duration: 0.15 },
-							height: { duration: 0.25, delay: 0.1, ease: 'easeIn' },
-							y: { duration: 0.25, delay: 0.1, ease: 'easeIn' },
+							height: { duration: 0.25, delay: 0.1, ease: "easeIn" },
+							y: { duration: 0.25, delay: 0.1, ease: "easeIn" },
 							scale: { duration: 0.15 },
 						},
 					}}
 					className="overflow-hidden"
-					style={{ width: '100%' }}
+					style={{ width: "100%" }}
 				>
 					<motion.div
 						className="pt-1"
@@ -107,7 +107,7 @@ const FormField: React.FC<FormFieldProps & PropsWithChildren> = ({
 								transition={{
 									duration: 0.25,
 									delay: 0.2,
-									type: 'spring',
+									type: "spring",
 									stiffness: 300,
 								}}
 							>

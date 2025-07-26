@@ -1,16 +1,15 @@
-import type { UseMutationResult } from '@tanstack/react-query';
-import { Button } from './ui/button';
-import type { PropsWithChildren, ReactNode } from 'react';
+import type { UseMutationResult } from "@tanstack/react-query";
+import { Button } from "./ui/button";
+import type { PropsWithChildren, ReactNode } from "react";
 
 type props = {
-	mutation: UseMutationResult<any, any, any, unknown>;
 	isSubmitting: boolean;
 } & PropsWithChildren;
-const SubmitButton = ({ children, mutation, isSubmitting }: props) => {
+const SubmitButton = ({ children, isSubmitting }: props) => {
 	return (
 		<Button
 			type="submit"
-			disabled={mutation.isPending || isSubmitting}
+			disabled={isSubmitting}
 			className={`
     w-full mt-6
     transition-transform duration-200 ease-out
@@ -19,7 +18,7 @@ const SubmitButton = ({ children, mutation, isSubmitting }: props) => {
     disabled:scale-95 disabled:opacity-75 disabled:cursor-not-allowed
   `}
 		>
-			{mutation.isPending || isSubmitting ? (
+			{isSubmitting ? (
 				<div className="flex items-center justify-center gap-2">
 					{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 					<svg

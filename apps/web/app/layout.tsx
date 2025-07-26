@@ -1,17 +1,17 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import Provider from '@/components/Provider';
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import Provider from "@/components/Provider";
 
 const inter = Inter({
-	subsets: ['latin'],
+	subsets: ["latin"],
 });
 export const metadata: Metadata = {
-	title: 'BankBlend',
-	description: 'Controle Financeiro Inteligente',
+	title: "BankBlend",
+	description: "Controle Financeiro Inteligente",
 };
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 export default async function RootLayout({
 	children,
 }: Readonly<{

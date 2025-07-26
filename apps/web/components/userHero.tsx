@@ -1,7 +1,7 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import Link from 'next/link';
-import LogoutButton from './logoutButton';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import Link from "next/link";
+import LogoutButton from "./logoutButton";
 import {
 	Sheet,
 	SheetContent,
@@ -9,8 +9,8 @@ import {
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
-} from './ui/sheet';
-import UserAvatar from './userAvatar';
+} from "./ui/sheet";
+import UserAvatar from "./userAvatar";
 
 const UserHero = async () => {
 	const session = await getServerSession(authOptions);

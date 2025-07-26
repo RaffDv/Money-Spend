@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from "next/image";
 
 const Footer = () => {
 	return (
@@ -7,7 +7,7 @@ const Footer = () => {
 				<a href="#top" className="flex space-x-5 items-center justify-start">
 					<Image
 						alt="BankBlend Logo"
-						src={'/logo.svg'}
+						src={"/logo.svg"}
 						width={24}
 						height={42}
 					/>
