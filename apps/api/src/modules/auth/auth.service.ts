@@ -3,16 +3,16 @@ import {
 	Inject,
 	Injectable,
 	UnauthorizedException,
-} from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { hash, verify } from 'argon2';
-import type { CreateUserDto } from '../user/dto/create-user.dto';
-import { UserService } from '../user/user.service';
-import { AuthJwtPayload } from './types/auth-jwtPayload';
-import refreshConfig from './config/refresh.config';
-import { ConfigType } from '@nestjs/config';
-import { Role, User } from 'generated/prisma';
-import { string } from 'zod';
+} from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { hash, verify } from "argon2";
+import type { CreateUserDto } from "../user/dto/create-user.dto";
+import { UserService } from "../user/user.service";
+import { AuthJwtPayload } from "./types/auth-jwtPayload";
+import refreshConfig from "./config/refresh.config";
+import { ConfigType } from "@nestjs/config";
+import { Role, User } from "generated/prisma";
+import { string } from "zod";
 
 @Injectable()
 export class AuthService {
@@ -26,7 +26,7 @@ export class AuthService {
 	async register(createUserDto: CreateUserDto) {
 		const user = await this.userService.findByEmail(createUserDto.email);
 
-		if (user) throw new ConflictException('User already exists!');
+		if (user) throw new ConflictException("User already exists!");
 
 		const { user: createdUser } = await this.userService.create(createUserDto);
 		return {
@@ -41,12 +41,12 @@ export class AuthService {
 	async validateUser(email: string, password: string) {
 		const user = await this.userService.findByEmail(email);
 
-		if (!user) throw new UnauthorizedException('Credentials are incorrect');
+		if (!user) throw new UnauthorizedException("Credentials are incorrect");
 
 		const isPasswordMatched = await verify(user.password, password);
 
 		if (!isPasswordMatched)
-			throw new UnauthorizedException('Credentials are incorrect');
+			throw new UnauthorizedException("Credentials are incorrect");
 
 		return {
 			id: user.id,
@@ -90,7 +90,7 @@ export class AuthService {
 	async validateUserByJwt(userId: number) {
 		const user = await this.userService.findOne(userId);
 
-		if (!user) throw new UnauthorizedException('User not found.');
+		if (!user) throw new UnauthorizedException("User not found.");
 
 		const currentUser = {
 			id: user.id,
@@ -103,14 +103,14 @@ export class AuthService {
 	async validateRefreshToken(userId: number, refresh_token: string) {
 		const user = await this.userService.findOne(userId);
 
-		if (!user) throw new UnauthorizedException('User not found.');
+		if (!user) throw new UnauthorizedException("User not found.");
 		const RTMatched = await verify(
 			user?.hashedRefreshToken as string,
 			refresh_token,
 		);
 
 		if (!RTMatched)
-			throw new UnauthorizedException('Refresh Token is invalid.');
+			throw new UnauthorizedException("Refresh Token is invalid.");
 
 		const currentUser = {
 			id: user.id,
@@ -158,7 +158,7 @@ export class AuthService {
 	}
 
 	async signOut(userId: number) {
-		console.log('signout invalidate tokens');
+		console.log("signout invalidate tokens");
 
 		return await this.userService.updateHRT(userId, null);
 	}

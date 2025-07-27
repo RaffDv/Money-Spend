@@ -1,10 +1,10 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import type { ConfigType } from '@nestjs/config';
-import { PassportStrategy } from '@nestjs/passport';
-import { Strategy, type VerifyCallback } from 'passport-google-oauth20';
-import { AuthService } from '../auth.service';
-import googleOauthConfig from '../config/google-oauth.config';
-import { User } from 'generated/prisma';
+import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
+import type { ConfigType } from "@nestjs/config";
+import { PassportStrategy } from "@nestjs/passport";
+import { Strategy, type VerifyCallback } from "passport-google-oauth20";
+import { AuthService } from "../auth.service";
+import googleOauthConfig from "../config/google-oauth.config";
+import { User } from "generated/prisma";
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy) {
@@ -17,7 +17,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
 			clientID: oauthConfig.clientID,
 			clientSecret: oauthConfig.clientSecret,
 			callbackURL: oauthConfig.callbackURL,
-			scope: ['email', 'profile'],
+			scope: ["email", "profile"],
 		});
 	}
 
@@ -34,11 +34,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
 			fullname: profile.displayName,
 			username: profile.displayName,
 			pictureURL: profile.photos[0].value,
-			password: '',
+			password: "",
 		});
 		if (!user.id) {
 			throw new UnauthorizedException(
-				'User cannot create an account or login in app ',
+				"User cannot create an account or login in app ",
 			);
 		}
 		const tokens = await this.authService.login(

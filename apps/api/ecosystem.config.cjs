@@ -3,7 +3,7 @@ module.exports = {
 		{
 			name: "bankblend API",
 			script: "pnpm",
-      args:"start:prod",
+			args: "start:prod",
 			cwd: "/home/ubuntu/Money-Spend/apps/api",
 			instances: "max",
 			exec_mode: "cluster",

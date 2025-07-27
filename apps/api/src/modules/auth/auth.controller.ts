@@ -9,18 +9,18 @@ import {
 	Res,
 	Response,
 	UseGuards,
-} from '@nestjs/common';
-import type { CreateUserDto } from '../user/dto/create-user.dto';
-import { AuthService } from './auth.service';
-import { GoogleGuard } from './guards/google-oauth.guard';
-import { LocalAuthGuard } from './guards/local.guard';
-import { RefreshGuard } from './guards/refresh.guard';
-import { Public } from './decorators/public.decorator';
-import { Roles } from './decorators/roles.decorator';
-import { Response as ResExpress } from 'express';
-import { ConfigService } from '@nestjs/config';
+} from "@nestjs/common";
+import type { CreateUserDto } from "../user/dto/create-user.dto";
+import { AuthService } from "./auth.service";
+import { GoogleGuard } from "./guards/google-oauth.guard";
+import { LocalAuthGuard } from "./guards/local.guard";
+import { RefreshGuard } from "./guards/refresh.guard";
+import { Public } from "./decorators/public.decorator";
+import { Roles } from "./decorators/roles.decorator";
+import { Response as ResExpress } from "express";
+import { ConfigService } from "@nestjs/config";
 
-@Controller('auth')
+@Controller("auth")
 export class AuthController {
 	constructor(
 		private readonly authService: AuthService,
@@ -31,19 +31,19 @@ export class AuthController {
 	// ------------- LOCAL SECTION -----------------
 	@Public()
 	@UseGuards(LocalAuthGuard)
-	@Post('login')
+	@Post("login")
 	async login(@Request() req, @Res({ passthrough: true }) res: ResExpress) {
 		const { id, fullname, username, role } = req.user;
 		const user = await this.authService.login(id, fullname, username, role);
 
-		res.cookie('refresh_token', user.refresh_token, {
-			domain: this.configService.get<string>('APP_URL'),
+		res.cookie("refresh_token", user.refresh_token, {
+			domain: this.configService.get<string>("APP_URL"),
 			httpOnly: true,
 			secure: true,
 		});
 
-		res.cookie('access_token', user.access_token, {
-			domain: this.configService.get<string>('APP_URL'),
+		res.cookie("access_token", user.access_token, {
+			domain: this.configService.get<string>("APP_URL"),
 			httpOnly: true,
 			secure: true,
 		});
@@ -52,7 +52,7 @@ export class AuthController {
 	}
 
 	@Public()
-	@Post('register')
+	@Post("register")
 	async register(@Body() body: CreateUserDto) {
 		return await this.authService.register(body);
 	}
@@ -62,12 +62,12 @@ export class AuthController {
 	// ------------- GOOGLE SECTION ----------------
 	@Public()
 	@UseGuards(GoogleGuard)
-	@Get('google/login')
+	@Get("google/login")
 	googleLogin() {}
 
 	@Public()
 	@UseGuards(GoogleGuard)
-	@Get('google/callback')
+	@Get("google/callback")
 	async googleCallback(@Request() req, @Res() res: ResExpress) {
 		const { email, ...rest } = req.user;
 		console.log(rest);
@@ -78,18 +78,18 @@ export class AuthController {
 			`https://${frontendUrl}/api/auth/callback/google-custom`,
 		);
 
-		redirectUrl.searchParams.append('access_token', rest.access_token);
-		redirectUrl.searchParams.append('refresh_token', rest.refresh_token);
-		redirectUrl.searchParams.append('user', JSON.stringify(rest));
+		redirectUrl.searchParams.append("access_token", rest.access_token);
+		redirectUrl.searchParams.append("refresh_token", rest.refresh_token);
+		redirectUrl.searchParams.append("user", JSON.stringify(rest));
 
-		res.cookie('refresh_token', rest.refresh_token, {
-			domain: this.configService.get<string>('APP_URL'),
+		res.cookie("refresh_token", rest.refresh_token, {
+			domain: this.configService.get<string>("APP_URL"),
 			httpOnly: true,
 			secure: true,
 		});
 
-		res.cookie('access_token', rest.access_token, {
-			domain: this.configService.get<string>('APP_URL'),
+		res.cookie("access_token", rest.access_token, {
+			domain: this.configService.get<string>("APP_URL"),
 			httpOnly: true,
 			secure: true,
 		});
@@ -106,7 +106,7 @@ export class AuthController {
 	// ------------- OTHERS SECTION ----------------
 	@Public()
 	@UseGuards(RefreshGuard)
-	@Post('refresh')
+	@Post("refresh")
 	refreshToken(@Request() req) {
 		const { id, fullname, username } = req.user;
 
@@ -116,13 +116,13 @@ export class AuthController {
 	}
 
 	@HttpCode(HttpStatus.OK)
-	@Post('logout')
+	@Post("logout")
 	async signout(@Request() req) {
 		return await this.authService.signOut(req.user.id);
 	}
 
-	@Roles('ADMIN', 'USER')
-	@Get('protected')
+	@Roles("ADMIN", "USER")
+	@Get("protected")
 	protected(@Request() req) {
 		return {
 			message: `Protected route, admin only, if you access this you can see you public id ${req.user.id}`,
