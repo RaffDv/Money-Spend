@@ -1,13 +1,12 @@
 "use client";
-import { SignUpFormSchema } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { type SubmitHandler, useForm } from "react-hook-form";
-import FormField from "./formField";
 import { AnimatePresence, motion } from "framer-motion";
-import SubmitButton from "./submitButton";
-import { supabase } from "@/lib/supabase/client";
 import { useState } from "react";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { createClient } from "@/lib/supabase/client";
+import { SignUpFormSchema } from "@/lib/types";
+import FormField from "./formField";
+import SubmitButton from "./submitButton";
 
 type fields = {
 	fullname: string;
@@ -17,6 +16,7 @@ type fields = {
 };
 
 const SignupForm = () => {
+	const supabase = createClient();
 	const [formError, setFormError] = useState<string | null>(null);
 	const {
 		register,
@@ -27,12 +27,17 @@ const SignupForm = () => {
 	});
 
 	const onSubmit: SubmitHandler<fields> = async (data) => {
-		console.log(data);
 		const validatedInputs = SignUpFormSchema.safeParse(data);
 		if (validatedInputs.success) {
 			const { data, error } = await supabase.auth.signUp({
 				email: validatedInputs.data.email,
 				password: validatedInputs.data.password,
+				options: {
+					data: {
+						fullname: validatedInputs.data.fullname,
+						username: validatedInputs.data.username,
+					},
+				},
 			});
 			if (error) {
 				setFormError(error.message);

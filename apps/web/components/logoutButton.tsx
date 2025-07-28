@@ -1,32 +1,23 @@
-// components/LogoutButton.tsx
 "use client";
 
-import { signOut } from "next-auth/react";
+import { createClient } from "@/lib/supabase/client";
 import { Button } from "./ui/button";
-import { api } from "@/lib/constants";
+import { useRouter } from "next/navigation";
 
 // TODO: Make logout button like github
 const LogoutButton = () => {
-	const handleSignOut = async () => {
-		try {
-			await api.post("/auth/logout");
-
-			await signOut({
-				callbackUrl: "/api/auth/logout",
-			});
-		} catch (error) {
-			console.error("Error during signout:", error);
-			// Sign out anyway even if API call fails
-			console.log(error);
-		}
-	};
+	const supabase = createClient();
+	const router = useRouter();
 	return (
 		<Button
-			onClick={() => handleSignOut()}
+			onClick={async () => {
+				await supabase.auth.signOut();
+				router.push("/login");
+			}}
 			className="text-sm underline"
 			variant={"outline"}
 		>
-			Sign Out
+			Sair
 		</Button>
 	);
 };

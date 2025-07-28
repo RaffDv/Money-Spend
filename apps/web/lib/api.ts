@@ -1,35 +1,42 @@
-import type { z } from "zod";
-import { api } from "./constants";
-import type { SignInFormSchema, SignUpFormSchema } from "./types";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import axios from "axios";
 
-type signUpFormType = z.infer<typeof SignUpFormSchema>;
-export const signUpReq = async (data: signUpFormType) =>
-	(await api.post("/auth/register", data)).data;
+const api = axios.create({
+	baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+});
+function getSupabaseClient(): SupabaseClient {
+	// Executando no Navegador?
+	if (typeof window !== "undefined") {
+		// Importa dinamicamente e retorna o cliente do navegador.
+		const { createClient } = require("./supabase/client");
+		return createClient();
+	}
+	// Executando no Servidor.
+	else {
+		// Importa dinamicamente e retorna o cliente do servidor.
+		const { createClient } = require("./supabase/server");
+		return createClient();
+	}
+}
 
-type loginType = z.infer<typeof SignInFormSchema>;
-export const loginReq = async (data: loginType) => {
-	const resp = await api.post("/auth/login", data);
+api.interceptors.request.use(
+	async (config) => {
+		try {
+			const supabase = getSupabaseClient();
+			const { data } = await supabase.auth.getSession();
 
-	return resp;
-};
+			if (data.session?.access_token) {
+				config.headers.Authorization = `Bearer ${data.session.access_token}`;
+			}
+		} catch (error) {
+			console.error("Erro ao obter sessão do Supabase no interceptor:", error);
+		}
 
-export const refreshReq = async (refresh_token: string) => {
-	const r = await axios.post(
-		`${process.env.BACKEND_URL}/auth/refresh`,
-		{},
-		{
-			headers: {
-				Cookie: `refresh_token=${refresh_token};`,
-			},
-		},
-	);
+		return config;
+	},
+	(error) => {
+		return Promise.reject(error);
+	},
+);
 
-	return r;
-};
-
-export const logoutReq = async () => {
-	const r = await api.post("/auth/logout");
-
-	return r;
-};
+export default api;

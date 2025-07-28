@@ -1,6 +1,5 @@
 "use client";
 import ContentCard from "@/components/contentCard";
-import PulsingLine from "@/components/pulsingLine";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/csr/ArrowUpRight";
 import {
@@ -17,12 +16,12 @@ import {
 	SecurityCameraIcon,
 	SealCheckIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 export default function HomePage() {
 	const router = useRouter();
-	const iconAnimationVariants = {
+	const iconAnimationVariants: Variants = {
 		initial: {
 			scale: 1,
 		},
@@ -54,7 +53,7 @@ export default function HomePage() {
 						<div className="absolute -inset-1 bg-gradient-to-br from-indigo-600/60 via-chart-3/60 to-purple-500/60 cursor-pointer rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
 						<div className="relative h-fit ring-1 ring-gray-900/5 rounded-lg leading-none w-full flex items-top justify-start space-x-6">
 							<a
-								href="/auth/login"
+								href="/login"
 								className="w-full cursor-pointer flex items-center justify-center text-center space-x-4"
 							>
 								<Button className="p-4 bg-gradient-to-br from-primary via-chart-3 to-accent w-full cursor-pointer">

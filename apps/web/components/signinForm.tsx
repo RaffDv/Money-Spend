@@ -9,13 +9,14 @@ import { type SubmitHandler, useForm } from "react-hook-form";
 import FormField from "./formField";
 import SubmitButton from "./submitButton";
 import { useState } from "react";
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 
 type fields = {
 	email: string;
 	password: string;
 };
 const SignInForm = () => {
+	const supabase = createClient();
 	const [formError, setFormError] = useState<string | null>(null);
 	const {
 		register,
@@ -29,7 +30,7 @@ const SignInForm = () => {
 	const onSubmit: SubmitHandler<fields> = async (data) => {
 		const validatedInputs = SignInFormSchema.safeParse(data);
 		if (validatedInputs.success) {
-			const { error } = await supabase.auth.signInWithPassword({
+			const { data, error } = await supabase.auth.signInWithPassword({
 				email: validatedInputs.data.email,
 				password: validatedInputs.data.password,
 			});
@@ -37,6 +38,8 @@ const SignInForm = () => {
 				setFormError(error.message);
 				return;
 			}
+			console.log(data);
+
 			router.push("/");
 		}
 	};

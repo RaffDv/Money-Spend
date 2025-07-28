@@ -1,6 +1,13 @@
 import Image from "next/image";
+import { createClient } from "@/lib/supabase/server";
 import { Button } from "./ui/button";
-const AppBar = () => {
+import LogoutButton from "./logoutButton";
+
+const AppBar = async () => {
+	const supabase = await createClient();
+	const user = await supabase.auth.getUser();
+	console.log(user.data.user);
+
 	return (
 		<nav className="max-h-28 w-svw md:w-full flex border-b border-b-white/10 p-4 items-center justify-center bg-background/20 bg-opacity-80 backdrop-blur-md">
 			<section className="grid grid-cols-3 w-full items-center mx-20">
@@ -28,11 +35,18 @@ const AppBar = () => {
 				</ul>
 
 				<div className="flex justify-end">
-					<a href="/auth/login">
-						<Button variant={"outline"} className="cursor-pointer">
-							<span>Login</span>
-						</Button>
-					</a>
+					{!user.data.user ? (
+						<a href="/login">
+							<Button variant={"outline"} className="cursor-pointer">
+								<span>Login</span>
+							</Button>
+						</a>
+					) : (
+						<div className="border-2 space-x-3 border-gray-400 p-2 rounded-xl">
+							<span>{user.data.user.user_metadata.username}</span>
+							<LogoutButton />
+						</div>
+					)}
 				</div>
 			</section>
 		</nav>
