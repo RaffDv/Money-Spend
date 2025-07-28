@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { SignUpFormSchema } from "@/lib/types";
 import FormField from "./formField";
 import SubmitButton from "./submitButton";
+import { useRouter } from "next/navigation";
 
 type fields = {
 	fullname: string;
@@ -16,6 +17,7 @@ type fields = {
 };
 
 const SignupForm = () => {
+	const router = useRouter();
 	const supabase = createClient();
 	const [formError, setFormError] = useState<string | null>(null);
 	const {
@@ -36,13 +38,14 @@ const SignupForm = () => {
 					data: {
 						fullname: validatedInputs.data.fullname,
 						username: validatedInputs.data.username,
+						role: "USER",
 					},
 				},
 			});
 			if (error) {
 				setFormError(error.message);
 			}
-			console.log(data);
+			router.push("/");
 		}
 	};
 
