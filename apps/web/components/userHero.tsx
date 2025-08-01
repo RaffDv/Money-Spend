@@ -1,6 +1,5 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
 import LogoutButton from "./logoutButton";
 import {
 	Sheet,
@@ -11,38 +10,36 @@ import {
 	SheetTrigger,
 } from "./ui/sheet";
 import UserAvatar from "./userAvatar";
+import { Separator } from "./ui/separator";
 
 const UserHero = async () => {
-	const session = await getServerSession(authOptions);
-	console.log(session);
-
+	const supabase = await createClient();
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
 	return (
 		<div className="flex items-center gap-2 ml-auto">
-			{session?.user ? (
-				<>
-					<Sheet>
-						<SheetTrigger asChild>
-							<UserAvatar session={session} />
-						</SheetTrigger>
-						<SheetContent className="w-64 rounded-l-2xl">
-							<SheetHeader>
-								<SheetTitle>{session.user.fullname}</SheetTitle>
-							</SheetHeader>
-							<SheetFooter>
-								<LogoutButton />
-							</SheetFooter>
-						</SheetContent>
-					</Sheet>
-				</>
+			{user ? (
+				<Sheet>
+					<SheetTrigger asChild>
+						<UserAvatar user={user} />
+					</SheetTrigger>
+					<SheetContent className="w-64 rounded-l-2xl">
+						<SheetHeader>
+							<SheetTitle>{user.user_metadata.fullname}</SheetTitle>
+						</SheetHeader>
+						<div className="px-4 space-y-3">
+							<Separator />
+							<LogoutButton />
+						</div>
+					</SheetContent>
+				</Sheet>
 			) : (
 				<>
-					<Link href="/auth/login" className="underline text-sm cursor-pointer">
+					<Link href="/login" className="underline text-sm cursor-pointer">
 						Sign In
 					</Link>
-					<Link
-						href="/auth/register"
-						className="underline text-sm cursor-pointer"
-					>
+					<Link href="/register" className="underline text-sm cursor-pointer">
 						Sign Up
 					</Link>
 				</>

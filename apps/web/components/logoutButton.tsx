@@ -1,24 +1,23 @@
 "use client";
 
-import { createClient } from "@/lib/supabase/client";
-import { Button } from "./ui/button";
+import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
-// TODO: Make logout button like github
 const LogoutButton = () => {
 	const supabase = createClient();
 	const router = useRouter();
 	return (
-		<Button
+		<button
+			type="button"
 			onClick={async () => {
 				await supabase.auth.signOut();
 				router.push("/login");
 			}}
-			className="text-sm underline"
-			variant={"outline"}
+			className="text-sm cursor-pointer text-start space-x-2 flex justify-start items-center "
 		>
-			Sair
-		</Button>
+			<LogOut /> <span>Sair</span>
+		</button>
 	);
 };
 

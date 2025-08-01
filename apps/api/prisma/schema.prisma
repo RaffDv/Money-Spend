@@ -330,11 +330,14 @@ model users {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model profiles {
-  id       String  @id @db.Uuid
-  username String?
-  fullname String?
-  role     String?
-  users    users   @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user_id    String    @id @db.Uuid
+  fullname   String?
+  username   String?
+  role       String?
+  picture    String?
+  email      String?
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  users      users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@schema("public")
 }

@@ -38,7 +38,7 @@ const SignupForm = () => {
 					data: {
 						fullname: validatedInputs.data.fullname,
 						username: validatedInputs.data.username,
-						role: "USER",
+						email: validatedInputs.data.email,
 					},
 				},
 			});

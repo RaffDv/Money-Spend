@@ -12,10 +12,11 @@ export class AppController {
 	getHello(): string {
 		return this.appService.getHello();
 	}
+
 	@UseGuards(AuthGuard("jwt"), RolesGuard)
 	@Roles("authenticated")
 	@Get("/protected")
-	getProtected(@Request() req) {
+	getProtected(@Request() req: any) {
 		return req.user;
 	}
 }
