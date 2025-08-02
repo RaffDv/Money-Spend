@@ -2,14 +2,16 @@ declare global {
 	namespace NodeJS {
 		interface ProcessEnv {
 			PORT: number;
-			JWT_SECRET_KEY: string;
-			JWT_EXPIRE: string;
-			JWT_REFRESH_SECRET_KEY: string;
-			JWT_REFRESH_EXPIRE: string;
+			API_URL: string;
+			API_HOSTNAME: string;
+			CLIENT_URL: string;
+
 			GOOGLE_CLIENT_ID: string;
 			GOOGLE_CLIENT_SECRET: string;
-			GOOGLE_CALLBACK_URL: string;
-			COOKIE_SECRET: string;
+			SUPABASE_AUTH_PUB_KEY: string;
+			SUPABASE_AUTH_PRIVATE_KEY: string;
+			SUPABASE_AUTH_PROJECT_URL: string;
+			SUPABASE_JWT_SECRET: string;
 		}
 	}
 }

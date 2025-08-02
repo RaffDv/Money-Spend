@@ -8,7 +8,7 @@ export class UserService {
 	async findOne(id: string) {
 		return await this.prisma.profiles.findUnique({
 			where: {
-				id,
+				user_id: id,
 			},
 		});
 	}

@@ -8,7 +8,8 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint --max-warnings 0",
-		"check-types": "tsc --noEmit"
+		"check-types": "tsc --noEmit",
+		"api:generate": "openapi-ts"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^5.2.0",
@@ -18,6 +19,7 @@
 		"@radix-ui/react-label": "^2.1.7",
 		"@radix-ui/react-separator": "^1.1.7",
 		"@radix-ui/react-slot": "^1.2.3",
+		"@supabase/auth-helpers-nextjs": "^0.10.0",
 		"@supabase/ssr": "^0.6.1",
 		"@supabase/supabase-js": "^2.52.1",
 		"@tailwindcss/postcss": "^4.1.11",
@@ -42,6 +44,8 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.1.2",
+		"@hey-api/client-axios": "^0.9.1",
+		"@hey-api/openapi-ts": "0.80.1",
 		"@repo/typescript-config": "workspace:*",
 		"@types/node": "^24.1.0",
 		"@types/react": "19.1.8",

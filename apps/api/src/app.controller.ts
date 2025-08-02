@@ -3,6 +3,7 @@ import { AppService } from "./app.service";
 import { Roles } from "./modules/auth/roles.decorator";
 import { RolesGuard } from "./modules/auth/roles.guard";
 import { AuthGuard } from "@nestjs/passport";
+import { ApiTags } from "@nestjs/swagger";
 
 @Controller()
 export class AppController {
