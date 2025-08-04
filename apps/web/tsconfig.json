@@ -9,8 +9,10 @@
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./*"]
-		}
+		},
+		"allowImportingTsExtensions": true
 	},
+
 	"include": [
 		"**/*.ts",
 		"**/*.tsx",

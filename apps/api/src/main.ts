@@ -1,29 +1,33 @@
-import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import * as cookieParser from "cookie-parser";
+import {
+	FastifyAdapter,
+	NestFastifyApplication,
+} from "@nestjs/platform-fastify";
 import { AppModule } from "./app.module";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 async function bootstrap() {
-	const app = await NestFactory.create(AppModule);
+	const methods = ["GET", "POST", "PUT", "PATCH", "DELETE"];
 
-	app.use(cookieParser(process.env.COOKIE_SECRET));
-	app.useGlobalPipes(new ValidationPipe());
-	app.enableCors({
-		origin: process.env.CLIENT_URL,
-		credentials: true,
-	});
+	const origin = process.env.CLIENT_URL;
+	console.log(origin);
 
-	const config = new DocumentBuilder()
+	const app = await NestFactory.create<NestFastifyApplication>(
+		AppModule,
+		new FastifyAdapter(),
+		{ cors: { methods, credentials: true, origin: origin } },
+	);
+
+	const swaggerConfig = new DocumentBuilder()
 		.setTitle("BankBlend API")
-		.setDescription("BankBlend API Swegger docs")
-		.setVersion("1.0")
+		.setDescription("BankBlend API docs")
+		.setVersion("0.1.0")
+		.addBearerAuth()
 		.build();
 
-	const document = SwaggerModule.createDocument(app, config);
+	const document = SwaggerModule.createDocument(app, swaggerConfig);
 
 	SwaggerModule.setup("api", app, document);
-
-	await app.listen(process.env.PORT, process.env.API_HOSTNAME);
+	await app.listen(process.env.PORT ?? 2000, "0.0.0.0");
 }
 bootstrap();

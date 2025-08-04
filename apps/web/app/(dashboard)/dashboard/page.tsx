@@ -1,49 +1,44 @@
 "use client";
+
 import type { Session } from "@supabase/supabase-js";
-import { useQuery } from "@tanstack/react-query";
-import { createClient as createSupabase } from "lib/supabase/client";
 import { useEffect, useState } from "react";
-import { userControllerGetAllProfilesOptions } from "@/lib/client/@tanstack/react-query.gen";
-import { createClient } from "@/lib/client/client";
+import { createClient } from "@/lib/supabase/client";
+import { getAllProfiles, ProfileDto } from "@/lib/gen";
 
 const page = () => {
 	const [sessionData, setSessionData] = useState<Session | null>(null);
+	const [profiles, setProfiles] = useState<ProfileDto[] | null>(null);
 
-	const supabase = createSupabase();
+	const supabase = createClient();
+
+	const getSession = async () => {
+		const {
+			data: { session },
+		} = await supabase.auth.getSession();
+		setSessionData(session);
+	};
+	const fecthAllUsers = async () => {
+		const response = await getAllProfiles({
+			headers: {
+				Authorization: `Bearer ${sessionData?.access_token}`,
+			},
+		});
+
+		setProfiles(response);
+	};
 
 	useEffect(() => {
-		const getUserData = async () => {
-			const { data, error } = await supabase.auth.getSession();
-
-			if (error) {
-				console.error("Erro ao buscar usuário:", error);
-			} else {
-				setSessionData(data.session);
-			}
-		};
-
-		getUserData();
-	}, [supabase]);
-	console.log(sessionData);
-
-	const client = createClient({
-		baseUrl: process.env.NEXT_PUBLIC_API_URL,
-		headers: {
-			Authorization: `Bearer ${sessionData?.access_token}`,
-		},
-	});
-
-	const { data } = useQuery({
-		...userControllerGetAllProfilesOptions({
-			client: client,
-		}),
-	});
+		if (!sessionData) getSession();
+		fecthAllUsers();
+	}, [sessionData]);
 
 	return (
 		<div>
 			<div>
 				<h1>ALL USERS</h1>
-				{JSON.stringify(data)}
+				{profiles?.map((profile) => (
+					<div key={profile.user_id}>{profile.email}</div>
+				))}
 			</div>
 		</div>
 	);

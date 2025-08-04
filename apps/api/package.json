@@ -20,6 +20,8 @@
 		"test:e2e": "jest --config ./test/jest-e2e.json"
 	},
 	"dependencies": {
+		"@fastify/static": "^8.2.0",
+		"@fastify/view": "^11.1.0",
 		"@nestjs/common": "^11.1.5",
 		"@nestjs/config": "^4.0.2",
 		"@nestjs/core": "^11.1.5",
@@ -27,10 +29,12 @@
 		"@nestjs/mapped-types": "^2.1.0",
 		"@nestjs/passport": "^11.0.5",
 		"@nestjs/platform-express": "^11.1.5",
+		"@nestjs/platform-fastify": "^11.1.5",
 		"@nestjs/swagger": "^11.2.0",
 		"@prisma/client": "6.12.0",
 		"argon2": "^0.43.1",
 		"cookie-parser": "^1.4.7",
+		"handlebars": "^4.7.8",
 		"passport": "^0.7.0",
 		"passport-jwt": "^4.0.1",
 		"prisma": "^6.13.0",

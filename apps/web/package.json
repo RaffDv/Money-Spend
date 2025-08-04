@@ -9,7 +9,7 @@
 		"start": "next start",
 		"lint": "next lint --max-warnings 0",
 		"check-types": "tsc --noEmit",
-		"api:generate": "openapi-ts"
+		"generate": "kubb generate"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^5.2.0",
@@ -46,6 +46,13 @@
 		"@biomejs/biome": "2.1.2",
 		"@hey-api/client-axios": "^0.9.1",
 		"@hey-api/openapi-ts": "0.80.1",
+		"@kubb/cli": "^3.16.1",
+		"@kubb/core": "^3.16.1",
+		"@kubb/oas": "^3.16.1",
+		"@kubb/plugin-client": "^3.16.1",
+		"@kubb/plugin-oas": "^3.16.1",
+		"@kubb/plugin-react-query": "^3.16.1",
+		"@kubb/plugin-ts": "^3.16.1",
 		"@repo/typescript-config": "workspace:*",
 		"@types/node": "^24.1.0",
 		"@types/react": "19.1.8",
