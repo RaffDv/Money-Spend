@@ -4,6 +4,7 @@ import type { Session } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { getAllProfiles, ProfileDto } from "@/lib/gen";
+import { ConnectBankButton } from "@/components/connectBankButton";
 
 const page = () => {
 	const [sessionData, setSessionData] = useState<Session | null>(null);
@@ -35,10 +36,7 @@ const page = () => {
 	return (
 		<div>
 			<div>
-				<h1>ALL USERS</h1>
-				{profiles?.map((profile) => (
-					<div key={profile.user_id}>{profile.email}</div>
-				))}
+				<ConnectBankButton userId="97132970-7f81-4eeb-bc6f-f7ef4cbb47d4" />
 			</div>
 		</div>
 	);

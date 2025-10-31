@@ -7,7 +7,7 @@ export default defineConfig(() => {
 	return {
 		root: ".",
 		input: {
-			path: "./bankblend-api.json",
+			path: "./api.json",
 		},
 		output: {
 			path: "./lib/gen",
