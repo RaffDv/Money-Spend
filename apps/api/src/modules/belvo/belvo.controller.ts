@@ -1,8 +1,9 @@
 /** biome-ignore-all lint/style/useImportType: <explanation> */
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Get, Post } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { BelvoService } from "./belvo.service";
 import { GenerateTokensDTO } from "./dto/generate-tokens.dto";
+import { debug } from "console";
 
 @ApiTags("belvo")
 @Controller("belvo")
@@ -24,5 +25,21 @@ export class BelvoController {
 			generateTokensDto.userId,
 			generateTokensDto.fullname,
 		);
+	}
+
+	@Get("sucess")
+	success() {
+		console.debug("account linked");
+		return true;
+	}
+	@Get("exit")
+	exit() {
+		console.debug("user exit windget");
+		return true;
+	}
+	@Get("error")
+	error() {
+		console.debug("error on link account");
+		return true;
 	}
 }
