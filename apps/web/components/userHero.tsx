@@ -11,6 +11,7 @@ import {
 } from "./ui/sheet";
 import UserAvatar from "./userAvatar";
 import { Separator } from "./ui/separator";
+import { Button } from "./ui/button";
 
 const UserHero = async () => {
 	const supabase = await createClient();
@@ -27,6 +28,11 @@ const UserHero = async () => {
 					<SheetContent className="w-64 rounded-l-2xl">
 						<SheetHeader>
 							<SheetTitle>{user.user_metadata.fullname}</SheetTitle>
+							<div className="px-4 py-2">
+								<Button variant={"link"}>
+									<Link href="/dashboard">Dashboard</Link>
+								</Button>
+							</div>
 						</SheetHeader>
 						<div className="px-4 space-y-3">
 							<Separator />

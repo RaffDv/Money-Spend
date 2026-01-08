@@ -1,5 +1,4 @@
 import { useBelvoGenerateTokens } from "../lib/gen/hooks/useBelvoGenerateTokens";
-import { redirect } from "next/navigation";
 import { Button } from "./ui/button";
 
 type Props = {
@@ -12,6 +11,7 @@ export function ConnectBankButton({ userId, fullname }: Props) {
 		mutation: {
 			onSuccess: (data) => {
 				const access_code = data.access;
+
 				if (access_code) {
 					console.debug("redirect to widget");
 					window.location.href = `https://widget.belvo.io/
@@ -21,7 +21,7 @@ export function ConnectBankButton({ userId, fullname }: Props) {
 	&institution_types=retail
 	&country_codes=BR
 	&access_mode=recurrent
-	&external_id=belvo_link_account_test
+	&external_id=belvo_test_janice
 	&resources=OWNERS,ACCOUNTS`;
 				}
 			},

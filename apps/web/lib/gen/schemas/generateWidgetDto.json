@@ -1,1 +1,0 @@
-{"type":"object","properties":{"userId":{"type":"string","description":"The ID of the user for whom the widget token is generated.","example":"user-123"}},"required":["userId"],"x-readme-ref-name":"GenerateWidgetDto"}

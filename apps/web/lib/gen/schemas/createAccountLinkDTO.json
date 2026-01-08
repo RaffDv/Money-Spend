@@ -1,0 +1,1 @@
+{"type":"object","properties":{"userId":{"type":"string","description":"interal user ID","example":"6293b998-9b1f-49a2-a1d4-759aeed13f88"},"link":{"type":"string","description":"belvo account link","example":"79a239c7-fe1b-4bc7-992b-b9b93a337eac"}},"required":["userId","link"],"x-readme-ref-name":"createAccountLinkDTO"}

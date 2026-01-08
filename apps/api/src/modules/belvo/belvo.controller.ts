@@ -1,9 +1,9 @@
 /** biome-ignore-all lint/style/useImportType: <explanation> */
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Post } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { BelvoService } from "./belvo.service";
+import { createAccountLinkDTO } from "./dto/create-account-link.dto";
 import { GenerateTokensDTO } from "./dto/generate-tokens.dto";
-import { debug } from "console";
 
 @ApiTags("belvo")
 @Controller("belvo")
@@ -27,19 +27,23 @@ export class BelvoController {
 		);
 	}
 
-	@Get("sucess")
-	success() {
-		console.debug("account linked");
-		return true;
+	@Post("linkAccount")
+	@ApiResponse({
+		status: 201,
+		description: "Account Link has been saved",
+	})
+	@ApiResponse({ status: 400, description: "Incorrect data" })
+	@ApiOperation({
+		summary: "Save a belvo account link",
+		operationId: "belvoSaveAccountLink",
+	})
+	async accountLink(@Body() dto: createAccountLinkDTO) {
+		return await this.belvoService.saveAccountLink(dto.userId, dto.link);
 	}
-	@Get("exit")
-	exit() {
-		console.debug("user exit windget");
-		return true;
-	}
-	@Get("error")
-	error() {
-		console.debug("error on link account");
+
+	@Post("/webhook")
+	async webhook(@Body() body: any) {
+		console.log("data receivied: ", body);
 		return true;
 	}
 }

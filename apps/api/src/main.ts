@@ -15,7 +15,13 @@ async function bootstrap() {
 	const app = await NestFactory.create<NestFastifyApplication>(
 		AppModule,
 		new FastifyAdapter(),
-		{ cors: { methods, credentials: true, origin: origin } },
+		{
+			cors: {
+				methods,
+				credentials: true,
+				origin: origin,
+			},
+		},
 	);
 
 	const swaggerConfig = new DocumentBuilder()
