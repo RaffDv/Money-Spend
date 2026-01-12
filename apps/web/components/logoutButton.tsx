@@ -14,7 +14,7 @@ const LogoutButton = () => {
 				await supabase.auth.signOut();
 				router.push("/login");
 			}}
-			className="text-sm cursor-pointer text-start space-x-2 flex justify-start items-center "
+			className="hover:underline underline-offset-2 cursor-pointer text-start space-x-2 flex justify-start items-center "
 		>
 			<LogOut /> <span>Sair</span>
 		</button>

@@ -14,6 +14,7 @@ type fields = {
 	username: string;
 	email: string;
 	password: string;
+	person_id: string;
 };
 
 const SignupForm = () => {
@@ -23,10 +24,30 @@ const SignupForm = () => {
 	const {
 		register,
 		handleSubmit,
+		setValue,
 		formState: { errors, isSubmitting },
 	} = useForm<fields>({
 		resolver: zodResolver(SignUpFormSchema),
 	});
+
+	const handlePersonIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		let value = e.target.value.replace(/\D/g, "");
+		if (value.length > 14) value = value.slice(0, 14);
+
+		if (value.length <= 11) {
+			value = value
+				.replace(/(\d{3})(\d)/, "$1.$2")
+				.replace(/(\d{3})(\d)/, "$1.$2")
+				.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+		} else {
+			value = value
+				.replace(/^(\d{2})(\d)/, "$1.$2")
+				.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+				.replace(/\.(\d{3})(\d)/, ".$1/$2")
+				.replace(/(\d{4})(\d)/, "$1-$2");
+		}
+		setValue("person_id", value);
+	};
 
 	const onSubmit: SubmitHandler<fields> = async (data) => {
 		const validatedInputs = SignUpFormSchema.safeParse(data);
@@ -39,11 +60,16 @@ const SignupForm = () => {
 						fullname: validatedInputs.data.fullname,
 						username: validatedInputs.data.username,
 						email: validatedInputs.data.email,
+						person_id: validatedInputs.data.person_id,
 					},
 				},
 			});
 			if (error) {
 				setFormError(error.message);
+				console.log(error);
+				console.log(data);
+
+				return;
 			}
 			router.push("/");
 		}
@@ -86,6 +112,19 @@ const SignupForm = () => {
 				>
 					Username
 				</FormField>
+				<FormField
+					register={register}
+					name="person_id"
+					type="text"
+					error={errors.person_id}
+					placeholder="123.456.789-00"
+					registerOptions={{
+						onChange: handlePersonIdChange,
+					}}
+				>
+					CPF/CNPJ
+				</FormField>
+
 				<FormField
 					error={errors.email}
 					register={register}

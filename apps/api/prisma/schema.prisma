@@ -339,15 +339,17 @@ model users {
 }
 
 model profiles {
-  user_id     String        @id @db.Uuid
-  fullname    String?
-  username    String?
-  role        ROLES         @default(USER)
-  picture     String?
-  email       String?
-  created_at  DateTime?     @default(now()) @db.Timestamptz(6)
-  AccountLink AccountLink[]
-  users       users         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user_id      String         @id @db.Uuid
+  fullname     String?
+  username     String?
+  person_id    String?        @unique
+  role         ROLES          @default(USER)
+  picture      String?
+  email        String?
+  created_at   DateTime?      @default(now()) @db.Timestamptz(6)
+  AccountLink  AccountLink[]
+  users        users          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  transactions transactions[]
 
   @@schema("public")
 }
@@ -357,6 +359,25 @@ model AccountLink {
   profilesUser_id String   @db.Uuid
   link            String   @unique
   user            profiles @relation(fields: [profilesUser_id], references: [user_id])
+
+  @@schema("public")
+}
+
+model transactions {
+  id            String   @id @unique @default(uuid())
+  external_id   String   @unique
+  account_id    String
+  amount        Float
+  status        String
+  currency      String
+  description   String
+  type          String
+  value_date    String
+  transacted_at DateTime @db.Timestamptz(6)
+  category      String?
+
+  profilesUser_id String   @db.Uuid
+  profile         profiles @relation(fields: [profilesUser_id], references: [user_id])
 
   @@schema("public")
 }

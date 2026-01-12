@@ -5,7 +5,7 @@
 
 export type CreateAccountLinkDTO = {
   /**
-   * @description interal user ID
+   * @description internal user ID
    * @type string
    */
   userId: string

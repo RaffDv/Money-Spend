@@ -1,6 +1,6 @@
 // formField.tsx - Versão com Framer Motion
 import type { PropsWithChildren } from "react";
-import type { FieldError, UseFormRegister } from "react-hook-form";
+import type { FieldError, UseFormRegister, RegisterOptions } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
@@ -13,6 +13,7 @@ export type FormFieldProps = {
 	register: UseFormRegister<any>;
 	error: FieldError | undefined;
 	valueAsNumber?: boolean;
+	registerOptions?: RegisterOptions;
 };
 
 const FormField: React.FC<FormFieldProps & PropsWithChildren> = ({
@@ -23,6 +24,7 @@ const FormField: React.FC<FormFieldProps & PropsWithChildren> = ({
 	error,
 	valueAsNumber,
 	children,
+	registerOptions,
 }) => (
 	<motion.div
 		layout="size"
@@ -39,7 +41,10 @@ const FormField: React.FC<FormFieldProps & PropsWithChildren> = ({
 				<Input
 					type={type}
 					placeholder={placeholder}
-					{...register(name, { valueAsNumber })}
+					{...register(name, {
+						...(valueAsNumber ? { valueAsNumber: true } : {}),
+						...registerOptions,
+					} as any)}
 					className={`transition-all duration-200 w-full ${
 						error
 							? "border-red-500 focus:ring-red-500 focus:border-red-500"

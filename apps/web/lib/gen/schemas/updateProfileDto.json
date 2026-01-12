@@ -1,0 +1,1 @@
+{"type":"object","properties":{"fullname":{"type":"string","description":"The full name of the user","example":"John Doe"},"username":{"type":"string","description":"The unique username of the user","example":"johndoe123"},"person_id":{"type":"string","description":"The CPF or CNPJ of the user","example":"000.000.000-00"}},"x-readme-ref-name":"UpdateProfileDto"}

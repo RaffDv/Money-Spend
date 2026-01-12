@@ -28,9 +28,53 @@ export const SignUpFormSchema = z.object({
 		.regex(/[^a-zA-z0-9]/, {
 			message: "Contain at least one special character",
 		}),
+	person_id: z
+		.string({
+			message: "CPF/CNPJ é obrigatório.",
+		})
+		.refine((doc) => {
+			const replacedDoc = doc.replace(/\D/g, "");
+			return replacedDoc.length >= 11;
+		}, "CPF/CNPJ deve conter no mínimo 11 caracteres.")
+		.refine((doc) => {
+			const replacedDoc = doc.replace(/\D/g, "");
+			return replacedDoc.length <= 14;
+		}, "CPF/CNPJ deve conter no máximo 14 caracteres.")
+		.refine((doc) => {
+			const replacedDoc = doc.replace(/\D/g, "");
+			return !!Number(replacedDoc);
+		}, "CPF/CNPJ deve conter apenas números."),
 });
 
 export const SignInFormSchema = z.object({
 	email: z.string().email({ message: "Please enter a valid email." }).trim(),
 	password: z.string().min(1, { message: "Password field must not be empty." }),
+});
+
+export const ProfileFormSchema = z.object({
+	fullname: z
+		.string()
+		.min(2, { message: "Name must be at least 2 characters long." })
+		.trim(),
+	username: z
+		.string()
+		.min(2, { message: "Name must be at least 2 characters long." })
+		.trim(),
+	email: z.string().email({ message: "Please enter a valid email." }).trim(),
+	person_id: z
+		.string({
+			message: "CPF/CNPJ é obrigatório.",
+		})
+		.refine((doc) => {
+			const replacedDoc = doc.replace(/\D/g, "");
+			return replacedDoc.length >= 11;
+		}, "CPF/CNPJ deve conter no mínimo 11 caracteres.")
+		.refine((doc) => {
+			const replacedDoc = doc.replace(/\D/g, "");
+			return replacedDoc.length <= 14;
+		}, "CPF/CNPJ deve conter no máximo 14 caracteres.")
+		.refine((doc) => {
+			const replacedDoc = doc.replace(/\D/g, "");
+			return !!Number(replacedDoc);
+		}, "CPF/CNPJ deve conter apenas números."),
 });

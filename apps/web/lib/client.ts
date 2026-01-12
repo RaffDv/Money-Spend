@@ -1,3 +1,5 @@
+import { createClient } from "@/lib/supabase/client";
+
 export type RequestConfig<TData = unknown> = {
 	baseURL?: string;
 	url?: string;
@@ -24,11 +26,37 @@ export type ResponseConfig<TData = unknown> = {
 export const httpClient = async <TData, TError = unknown, TVariables = unknown>(
 	config: RequestConfig<TVariables>,
 ): Promise<ResponseConfig<TData>> => {
-	const response = await fetch(`${config.baseURL}${config.url}`, {
+	const supabase = createClient();
+	const {
+		data: { session },
+	} = await supabase.auth.getSession();
+	const token = session?.access_token;
+
+	const headers = new Headers(config.headers);
+
+	if (token) {
+		headers.set("Authorization", `Bearer ${token}`);
+	}
+
+	if (
+		!headers.has("Content-Type") &&
+		config.data &&
+		!(config.data instanceof FormData)
+	) {
+		headers.set("Content-Type", "application/json");
+	}
+
+	const baseUrl = config.baseURL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+	const url = config.url?.startsWith("/") ? config.url : `/${config.url}`;
+
+	const response = await fetch(`${baseUrl}${url}`, {
 		method: config.method.toUpperCase(),
-		body: JSON.stringify(config.data),
+		body:
+			config.data instanceof FormData
+				? config.data
+				: JSON.stringify(config.data),
 		signal: config.signal,
-		headers: config.headers,
+		headers: headers,
 	});
 	const data = await response.json();
 

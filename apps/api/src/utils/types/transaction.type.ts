@@ -1,0 +1,122 @@
+export type Transaction = {
+	id: string;
+	account: {
+		id: string;
+		link: string;
+		institution: {
+			name: string;
+			type: string;
+		};
+		created_at: string;
+		name: string;
+		type: string;
+		agency: string | null;
+		number: string;
+		balance: {
+			blocked: number | null;
+			current: number;
+			available: number;
+			automatically_invested: number | null;
+		};
+		subtype: string;
+		category: string;
+		currency: string;
+		loan_data: null;
+		overdraft: {
+			used: number;
+			arranged: number;
+			unarranged: number;
+		} | null;
+		check_digit: string | null;
+		credit_data: {
+			cards: {
+				is_multiple: boolean;
+				identification_number: string;
+			}[];
+			limits: {
+				type: string;
+				line_name: string;
+				card_number: string;
+				used_amount: number;
+				credit_limit: number;
+				available_amount: number;
+				is_limit_flexible: boolean;
+				consolidation_type: string;
+				line_name_additional_info: string;
+			}[];
+			network: string;
+			collected_at: string;
+			credit_limit: number;
+			cutting_date: string;
+			interest_rate: number | null;
+			minimum_payment: number;
+			monthly_payment: number | null;
+			last_payment_date: string | null;
+			next_payment_date: string | null;
+			last_period_balance: number | null;
+			no_interest_payment: number | null;
+			network_additional_info: string;
+		} | null;
+		balance_type: string;
+		collected_at: string;
+		clearing_code: string | null;
+		bank_product_id: string | null;
+		last_accessed_at: string | null;
+		internal_identification: string;
+		public_identification_name: string;
+		public_identification_value: string;
+	};
+	created_at: string;
+	category: string | null;
+	subcategory: string | null;
+	merchant: null;
+	mcc: number | null;
+	type: string;
+	amount: number;
+	status: string;
+	balance: number | null;
+	currency: string;
+	loan_data: null;
+	reference: string | null;
+	value_date: string;
+	description: string;
+	collected_at: string;
+	counterparty: {
+		name: string | null;
+		type: string;
+		agency: string;
+		number: string;
+		check_digit: string;
+		clearing_code: string;
+		document_number: string;
+	} | null;
+	observations: string | null;
+	payment_type: string | null;
+	transacted_at: string;
+	operation_type: string;
+	accounting_date: string | null;
+	credit_card_data: {
+		fee_type: string | null;
+		bill_name: string | null;
+		bill_amount: number | null;
+		bill_status: string | null;
+		card_number: string;
+		credits_type: string;
+		bill_due_date: string | null;
+		credit_card_bill: {
+			id: string;
+			internal_identification: string;
+		};
+		previous_bill_total: number | null;
+		installment_identifier: number;
+		number_of_installments: number;
+		fee_type_additional_info: string;
+		bill_internal_identification: string;
+		credits_type_additional_info: string;
+	} | null;
+	local_currency_amount: number | null;
+	internal_identification: string;
+	inferred_accounting_date: string;
+	local_datetime_transacted_at: string | null;
+	operation_type_additional_info: string | null;
+};

@@ -4,6 +4,7 @@ import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { BelvoService } from "./belvo.service";
 import { createAccountLinkDTO } from "./dto/create-account-link.dto";
 import { GenerateTokensDTO } from "./dto/generate-tokens.dto";
+import { WebhookDTO } from "./dto/webhook.dto";
 
 @ApiTags("belvo")
 @Controller("belvo")
@@ -42,8 +43,42 @@ export class BelvoController {
 	}
 
 	@Post("/webhook")
-	async webhook(@Body() body: any) {
-		console.log("data receivied: ", body);
+	@ApiResponse({
+		status: 200,
+		description: "Webhook event processed successfully.",
+	})
+	@ApiResponse({ status: 400, description: "Bad Request." })
+	@ApiOperation({
+		summary: "Handle Belvo webhook events",
+		operationId: "belvoWebhook",
+	})
+	async webhook(@Body() dto: WebhookDTO) {
+		console.log("data receivied: ", dto);
+		switch (dto.webhook_type) {
+			case "TRANSACTIONS":
+				switch (dto.webhook_code) {
+					case "new_transactions_avaliable":
+						break;
+					case "historical_update":
+						if (dto.data?.errors) {
+							const resp =
+								await this.belvoService.manualHistoricalUpdateTrigger(
+									dto.link_id,
+								);
+							console.log(resp);
+						}
+						this.belvoService.retrieveUserTransactions(dto.link_id);
+						break;
+
+					default:
+						break;
+				}
+
+				break;
+
+			default:
+				break;
+		}
 		return true;
 	}
 }
