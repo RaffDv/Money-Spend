@@ -355,10 +355,25 @@ model profiles {
 }
 
 model AccountLink {
-  id              String   @id @default(uuid())
-  profilesUser_id String   @db.Uuid
-  link            String   @unique
-  user            profiles @relation(fields: [profilesUser_id], references: [user_id])
+  id              String      @id @default(uuid())
+  profilesUser_id String      @db.Uuid
+  link            String      @unique
+  external_id     String?
+  institution     String?
+  status          LINK_STATUS @default(ACTIVE)
+  last_error      String?
+  created_at      DateTime    @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime    @default(now()) @updatedAt @db.Timestamptz(6)
+  user            profiles    @relation(fields: [profilesUser_id], references: [user_id])
+
+  @@schema("public")
+}
+
+enum LINK_STATUS {
+  ACTIVE
+  INVALID_CREDENTIALS
+  TOKEN_EXPIRED
+  INACTIVE
 
   @@schema("public")
 }

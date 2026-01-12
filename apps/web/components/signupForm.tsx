@@ -52,6 +52,7 @@ const SignupForm = () => {
 	const onSubmit: SubmitHandler<fields> = async (data) => {
 		const validatedInputs = SignUpFormSchema.safeParse(data);
 		if (validatedInputs.success) {
+			const cleanPersonId = validatedInputs.data.person_id.replace(/\D/g, "");
 			const { data, error } = await supabase.auth.signUp({
 				email: validatedInputs.data.email,
 				password: validatedInputs.data.password,
@@ -60,7 +61,7 @@ const SignupForm = () => {
 						fullname: validatedInputs.data.fullname,
 						username: validatedInputs.data.username,
 						email: validatedInputs.data.email,
-						person_id: validatedInputs.data.person_id,
+						person_id: cleanPersonId,
 					},
 				},
 			});

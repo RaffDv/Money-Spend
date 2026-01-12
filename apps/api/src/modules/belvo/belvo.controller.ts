@@ -1,6 +1,12 @@
 /** biome-ignore-all lint/style/useImportType: <explanation> */
-import { Body, Controller, Post } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Post, Get, UseGuards, Req } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
+import {
+	ApiOperation,
+	ApiResponse,
+	ApiTags,
+	ApiBearerAuth,
+} from "@nestjs/swagger";
 import { BelvoService } from "./belvo.service";
 import { createAccountLinkDTO } from "./dto/create-account-link.dto";
 import { GenerateTokensDTO } from "./dto/generate-tokens.dto";
@@ -39,7 +45,20 @@ export class BelvoController {
 		operationId: "belvoSaveAccountLink",
 	})
 	async accountLink(@Body() dto: createAccountLinkDTO) {
+		// TODO: Add institution from DTO if available in future
 		return await this.belvoService.saveAccountLink(dto.userId, dto.link);
+	}
+
+	@ApiBearerAuth()
+	@UseGuards(AuthGuard("jwt"))
+	@Get("links")
+	@ApiOperation({
+		summary: "Get all user connected links",
+		operationId: "getBelvoLinks",
+	})
+	async getLinks(@Req() req: any) {
+		const userId = req.user.sub || req.user.id;
+		return await this.belvoService.getLinksByUser(userId);
 	}
 
 	@Post("/webhook")
@@ -54,19 +73,27 @@ export class BelvoController {
 	})
 	async webhook(@Body() dto: WebhookDTO) {
 		console.log("data receivied: ", dto);
+
+		// Handle Link Errors
+		if (dto.data?.errors) {
+			console.error(`Link ${dto.link_id} has errors:`, dto.data.errors);
+			await this.belvoService.updateLinkStatus(
+				dto.link_id,
+				"INVALID_CREDENTIALS",
+				JSON.stringify(dto.data.errors),
+			);
+			return true;
+		}
+
 		switch (dto.webhook_type) {
 			case "TRANSACTIONS":
 				switch (dto.webhook_code) {
 					case "new_transactions_avaliable":
+						await this.belvoService.updateLinkStatus(dto.link_id, "ACTIVE");
+						this.belvoService.retrieveUserTransactions(dto.link_id);
 						break;
 					case "historical_update":
-						if (dto.data?.errors) {
-							const resp =
-								await this.belvoService.manualHistoricalUpdateTrigger(
-									dto.link_id,
-								);
-							console.log(resp);
-						}
+						await this.belvoService.updateLinkStatus(dto.link_id, "ACTIVE");
 						this.belvoService.retrieveUserTransactions(dto.link_id);
 						break;
 

@@ -16,6 +16,7 @@ export type { BelvoWebhook200, BelvoWebhook400, BelvoWebhookMutationRequest, Bel
 export type { CreateAccountLinkDTO } from './CreateAccountLinkDTO.ts'
 export type { GenerateTokensDTO } from './GenerateTokensDTO.ts'
 export type { GetAllProfiles200, GetAllProfiles401, GetAllProfiles403, GetAllProfilesQueryResponse, GetAllProfilesQuery } from './GetAllProfiles.ts'
+export type { GetBelvoLinks200, GetBelvoLinksQueryResponse, GetBelvoLinksQuery } from './GetBelvoLinks.ts'
 export type { ProfileDtoRoleEnum, ProfileDto } from './ProfileDto.ts'
 export type {
   UpdateProfile200,

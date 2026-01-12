@@ -30,6 +30,21 @@ type ProfileFormValues = {
 	person_id: string;
 };
 
+function formatPersonId(value: string) {
+	const digits = value.replace(/\D/g, "");
+	if (digits.length <= 11) {
+		return digits
+			.replace(/(\d{3})(\d)/, "$1.$2")
+			.replace(/(\d{3})(\d)/, "$1.$2")
+			.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+	}
+	return digits
+		.replace(/^(\d{2})(\d)/, "$1.$2")
+		.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+		.replace(/\.(\d{3})(\d)/, ".$1/$2")
+		.replace(/(\d{4})(\d)/, "$1-$2");
+}
+
 function ProfileSectionSkeleton() {
 	return (
 		<Card className="bg-background/50 backdrop-blur-sm border-muted">
@@ -104,7 +119,7 @@ export default function ProfileSection({
 			fullname: metadata.fullname || metadata.full_name || "",
 			username: metadata.username || metadata.name || "",
 			email: user?.email || "",
-			person_id: metadata.person_id || "",
+			person_id: metadata.person_id ? formatPersonId(metadata.person_id) : "",
 		},
 	});
 
@@ -121,7 +136,9 @@ export default function ProfileSection({
 					user.user_metadata.fullname || user.user_metadata.full_name || "",
 				username: user.user_metadata.username || user.user_metadata.name || "",
 				email: user.email || "",
-				person_id: user.user_metadata.person_id || "",
+				person_id: user.user_metadata.person_id
+					? formatPersonId(user.user_metadata.person_id)
+					: "",
 			};
 			reset(defaultValues);
 
@@ -147,19 +164,7 @@ export default function ProfileSection({
 		let value = e.target.value.replace(/\D/g, "");
 		if (value.length > 14) value = value.slice(0, 14);
 
-		if (value.length <= 11) {
-			value = value
-				.replace(/(\d{3})(\d)/, "$1.$2")
-				.replace(/(\d{3})(\d)/, "$1.$2")
-				.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-		} else {
-			value = value
-				.replace(/^(\d{2})(\d)/, "$1.$2")
-				.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
-				.replace(/\.(\d{3})(\d)/, ".$1/$2")
-				.replace(/(\d{4})(\d)/, "$1-$2");
-		}
-		setValue("person_id", value, { shouldDirty: true });
+		setValue("person_id", formatPersonId(value), { shouldDirty: true });
 	};
 
 	const { mutateAsync: updateProfile } = useUpdateProfile();
@@ -171,7 +176,7 @@ export default function ProfileSection({
 				data: {
 					fullname: data.fullname,
 					username: data.username,
-					person_id: data.person_id,
+					person_id: data.person_id.replace(/\D/g, ""),
 				},
 			});
 

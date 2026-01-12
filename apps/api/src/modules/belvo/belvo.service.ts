@@ -1,4 +1,4 @@
-import { Injectable, UnprocessableEntityException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import axios from "axios";
 import * as https from "node:https";
 import { PrismaService } from "../prisma/prisma.service";
@@ -8,10 +8,29 @@ import { Prisma } from "generated/prisma";
 @Injectable()
 export class BelvoService {
 	constructor(private readonly prisma: PrismaService) {}
+
 	async generateWidgetToken(userId: string, fullname: string) {
 		// TODO: turn this not harded coded
 		const id = process.env.BELVO_SECRET_ID;
 		const password = process.env.BELVO_SECRET_PASSWORD;
+
+		const user = await this.prisma.profiles.findUnique({
+			where: {
+				user_id: userId,
+			},
+		});
+		if (!user) {
+			return {
+				code: 400,
+				message: "user not found",
+			};
+		}
+
+		console.log(
+			`user fullname: ${user.fullname} | user personal_id: ${user.person_id} | personal id type:${
+				user.person_id?.length && user.person_id.length > 11 ? "CNPJ" : "CPF"
+			} `,
+		);
 
 		const payload = {
 			id,
@@ -39,9 +58,12 @@ export class BelvoService {
 					],
 					identification_info: [
 						{
-							type: "CPF",
-							number: "96644087000",
-							name: "Janice Santana Matos",
+							type:
+								user.person_id?.length && user.person_id.length > 11
+									? "CNPJ"
+									: "CPF",
+							number: user.person_id,
+							name: user.fullname,
 						},
 					],
 				},
@@ -50,7 +72,7 @@ export class BelvoService {
 		try {
 			console.debug("Requesting Belvo token...");
 			const { data } = await axios.post(
-				"https://sandbox.belvo.com/api/token/",
+				`${process.env.BELVO_URL}/api/token/`,
 				payload,
 				{
 					headers: { "Content-Type": "application/json" },
@@ -58,8 +80,6 @@ export class BelvoService {
 					httpsAgent: new https.Agent({ family: 4 }),
 				},
 			);
-			console.log("Belvo token generated successfully");
-
 			return data;
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
@@ -71,14 +91,18 @@ export class BelvoService {
 		}
 	}
 
-	async saveAccountLink(userId: string, link: string): Promise<object> {
-		console.log(userId, link);
-
+	async saveAccountLink(
+		userId: string,
+		link: string,
+		institution?: string,
+	): Promise<object> {
 		try {
 			await this.prisma.accountLink.create({
 				data: {
 					profilesUser_id: userId,
 					link,
+					institution,
+					status: "ACTIVE",
 				},
 			});
 
@@ -92,6 +116,26 @@ export class BelvoService {
 		}
 	}
 
+	async updateLinkStatus(
+		linkId: string,
+		status: "ACTIVE" | "INVALID_CREDENTIALS" | "TOKEN_EXPIRED",
+		lastError?: string,
+	) {
+		return await this.prisma.accountLink.update({
+			where: { link: linkId },
+			data: {
+				status,
+				last_error: lastError,
+			},
+		});
+	}
+
+	async getLinksByUser(userId: string) {
+		return await this.prisma.accountLink.findMany({
+			where: { profilesUser_id: userId },
+		});
+	}
+
 	async retrieveUserTransactions(linkId: string) {
 		try {
 			const linkRecord = await this.prisma.accountLink.findUnique({
@@ -103,7 +147,7 @@ export class BelvoService {
 
 			if (!linkRecord) {
 				console.error(`Link ${linkId} not found in database.`);
-				throw new UnprocessableEntityException("Link not found.");
+				return true;
 			}
 
 			const userId = linkRecord.profilesUser_id;
@@ -128,7 +172,6 @@ export class BelvoService {
 				`${process.env.BELVO_URL}/api/transactions/?page=1&link=${linkId}&page_size=1000`;
 
 			while (nextUrl) {
-				console.log(`Fetching transactions from: ${nextUrl}`);
 				const { data } = await axios.get<ResponseDataType>(nextUrl, {
 					headers,
 				});
@@ -157,12 +200,9 @@ export class BelvoService {
 
 				nextUrl = data.next;
 			}
-			console.log("Transactions retrieved and saved successfully.");
 		} catch (error) {
 			console.error("Error retrieving user transactions:", error.data);
-			throw new UnprocessableEntityException(
-				"Failed to retrieve transactions.",
-			);
+			return true;
 		}
 	}
 

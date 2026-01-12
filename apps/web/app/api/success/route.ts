@@ -7,28 +7,40 @@ export async function GET(request: NextRequest) {
 	const supabase = await createClient();
 
 	const {
-		data: { user },
+		data: { session },
 		error,
-	} = await supabase.auth.getUser();
+	} = await supabase.auth.getSession();
 
-	if (error || !user) {
+	if (error || !session?.user) {
 		console.debug("Usuário não autenticado via Server Side");
 		return redirect("/login");
 	}
 
-	const userId: string = user.id;
-	console.log("User ID Validado:", userId);
+	const userId: string = session.user.id;
+	const token = session.access_token;
 
 	const searchParams = request.nextUrl.searchParams;
 
 	const link = searchParams.get("link");
-	console.log(link, userId);
 
-	const resp = await axios.post("http://localhost:4000/belvo/linkAccount", {
-		userId: userId,
-		link: link,
-	});
-	console.log(resp.data);
+	try {
+		const resp = await axios.post(
+			"http://localhost:4000/belvo/linkAccount",
+			{
+				userId: userId,
+				link: link,
+			},
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			},
+		);
+		console.log(resp.data);
+	} catch (err) {
+		console.error("Erro ao vincular conta:", err);
+		// Opcional: Redirecionar para erro ou tratar
+	}
 
-	return redirect("/dashboard");
+	return redirect("/account");
 }
